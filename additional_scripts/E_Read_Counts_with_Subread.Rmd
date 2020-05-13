@@ -1,0 +1,96 @@
+---
+title: "Counting reads with Subread"
+author: "Abbi Edwards"
+date: "September 2019"
+output:
+  ioslides_presentation:
+    css: stylesheet.css
+    logo: images/CRUK_Cambridge_Institute.png
+    smaller: yes
+    widescreen: yes
+  beamer_presentation: default
+  slidy_presentation: default
+---
+
+## Counting
+
+* Use **`featureCounts`** [@Liao2014] programme from the [subRead
+package](http://subread.sourceforge.net/)
+
+
+ * Need to provide **`featureCounts`** with an annotation file. 
+
+<img src="images/counting_workflow.png" class="centerimg" style="width: 70%; margin-top: 60px;">
+
+## GTF File Format
+
+GTF/GFF files define genomic regions covered by different types of genomic
+features, e.g. genes, transcripts, exons, or UTRs. 
+
+<img src="images/gtf.png" class="centerimg" style="width: 100%;">
+
+## GTF File Format
+
+<img src="images/gtf_chr.png" class="centerimg" style="width: 100%;">
+
+## GTF File Format
+
+<img src="images/gtf_source.png" class="centerimg" style="width: 100%;">
+
+## GTF File Format
+
+<img src="images/gtf_feature.png" class="centerimg" style="width: 100%;">
+
+## GTF File Format
+
+<img src="images/gtf_coords.png" class="centerimg" style="width: 100%;">
+
+## GTF File Format
+
+<img src="images/gtf_strand.png" class="centerimg" style="width: 100%;">
+
+## GTF File Format
+
+<img src="images/gtf_extra.png" class="centerimg" style="width: 100%;">
+
+## Using FeatureCounts
+
+When using a GTF/GFF file we need to tell **`featureCounts`** 
+
+* what feature type to use to count reads
+* what attribute type to summarise the results with
+
+For RNAseq we most commonly wish to count reads aligning to exons, and then to
+summarise at the gene level. 
+
+<img src="images/genes_and_exons.png" class="centerimg" style="width: 60%; margin-top: 60px;">
+
+<img src="images/features_and_attributes.png" class="centerimg" style="width: 60%; margin-top: 60px;">
+
+## Running FeatureCounts
+
+The code below uses **`featureCounts`** to count reads in a BAM file against a
+GTF for the mouse GRCm38 genome assembly.
+
+```
+  mkdir counts
+
+  featureCounts \
+      -t exon \
+      -g gene_id \
+      --primary \
+      -a references/Mus_musculus.GRCm38.97.gtf \
+      -o counts/MCL1.DL.featureCounts \
+      bam/MCL1.DL.sorted.bam
+```
+* **`-t exon`** - the **feature** type to count reads against, in this case
+  exons
+* **`-g gene_id`** - the **attribute** type to summarise counts by, in this
+  case the gene ID
+* **`--primary`** - only count primary alignment
+* **`-a`** - the gene annotation reference file
+* **`-o`** - the name for the output files
+
+
+# And now onto the Exercise...
+
