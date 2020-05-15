@@ -141,15 +141,12 @@ solutions](html/05_Annotation_and_Visualisation.Solutions.html) -->
 >
 > __**Some basic experience of using a UNIX/LINUX command line is assumed**__
 > 
-> __**Some basic R knowledge is assumed (and is essential). Without it, you
+> __**Some R knowledge is assumed (and is essential). Without it, you
 > will struggle on this course.**__ 
 > If you are not familiar with the R statistical programming language we
 > strongly encourage you to work through an introductory R course before
 > attempting these materials.
-> We recommend reading our [R crash 
-course](https://bioinformatics-core-shared-training.github.io/r-crash-course/)
-> before attending, which should take around 1 hour
->
+> We recommend our [Introduction to R course](https://bioinformatics-core-shared-training.github.io/r-intro/)
 
 ## Source Materials for Practicals
 
@@ -159,11 +156,12 @@ repository](https://github.com/bioinformatics-core-shared-training/RNAseq_May_20
 
 ## Extended materials
 
-Ther materials linked to from this page are somewhat cut down from the complete
+The materials linked to from this page are somewhat cut down from the complete
 course that we normally teach. The [Extended Materials](Extended_index.md)
-contain the full course materials and links to additional RNAseq materialsi
+contain the full course materials and links to additional RNAseq materials,
 including instruction on downloading and processing the raw data for this
-course, a link to an excellent R course and where to get help after the course.
+course, a link to an excellent R course, and where to get further help after
+the course.
 
 ## Acknowledgements
 

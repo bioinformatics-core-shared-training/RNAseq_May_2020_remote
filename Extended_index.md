@@ -1,6 +1,7 @@
-# Introduction to RNA-seq data analysis 
-### 2nd - 4th September 2019
-#### Bioinformatics Training Room, Craik-Marshall Building, Downing Site, University of Cambridge
+# Introduction to RNA-seq data analysis - Extended Materials
+### 19th - 21st May 2020
+#### Taught remotely
+#### Bioinformatics Training, Craik-Marshall Building, Downing Site, University of Cambridge
 
 ![](images/CRUK_Cambridge_Major Centre logo.jpg)
 
@@ -16,98 +17,52 @@ data, such as boxplots and heatmaps.
 This workshop is aimed at biologists interested in learning how to perform
 differential expression analysis of RNA-seq data. 
 
-## Etherpad
-
-There is a [course
-Etherpad](https://etherpad.wikimedia.org/p/RNAseq_UoC_September2019). Please post
-questions here and we will answer them as soon as we can (or if you can answer
-someone elses question do so!). The trainers may also post useful code snippets
-here for you.
-
-## Instructors
-
-* Stephane Ballereau - Bioinformatics Core, Cancer Research UK Cambridge Institute
-* Dominique-Laurent Couturier - Bioinformatics Core, Cancer Research UK Cambridge Institute 
-* Abbi Edwards - Bioinformatics Core, Cancer Research UK Cambridge Institute
-* Karsten Bach - Marioni Group, Cancer Research UK Cambridge Institute
-* Ashley D Sawle - Bioinformatics Core, Cancer Research UK Cambridge Institute
-
-## Timetable
-
 ### Day 1
 
-9:30 - 10:00 - [Introduction to RNAseq
-Methods](html/A_Introduction_to_RNAseq_Methods.html) - Ashley Sawle
+1. Raw read file format and QC
 
-10:00 - 11:30 Raw read file format and QC - Abbi Edwards  
     - [Introductory slides](html/B_FastQC.html)  
-    - [Practical](html/B_FastQC_practical.html)  
-     - [Practical solutions](html/B_FastQC_practical.Solutions.html)  
-    - [Example of using Trimmomatic to remove adapters](html/Trimming.html)
+    - [Practical](extended_html/B_FastQC_practical.html)  
+    - [Practical solutions](Extended_html/B_FastQC_practical.Solutions.html)  
+    - [Example of using Trimmomatic to remove adapters](extended_html/Trimming.html)
 
-11:30 - 12:30 Short read alignment with HISAT2 - Ashley Sawle  
+2. Short read alignment with HISAT2  
+
     - [Introductory slides](html/C_Alignment_with_HISAT2.html)  
-    - [Practical](html/C_Alignment_with_HISAT2_practical.html)  
-    - [Practical solutions](html/C_Alignment_with_HISAT2.Solutions.html)  
+    - [Practical](extended_html/C_Alignment_with_HISAT2_practical.html)  
+    - [Practical solutions](extended_html/C_Alignment_with_HISAT2.Solutions.html)  
 
-12:30 - 13:30 Lunch
+3. QC of alignment  
 
-13:30 - 15:00 Short read alignment with HISAT2 _continued_
-
-15:00 - 16:30 QC of alignment - Ashley Sawle  
     - [Introductory slides](html/D_QC_of_aligned_reads.html)  
-    - [Practical](html/D_QC_of_aligned_reads_practical.html)  
-     - [Practical solutions](html/D_QC_of_aligned_reads.Solutions.html)  
+    - [Practical](extended_html/D_QC_of_aligned_reads_practical.html)  
+    - [Practical solutions](extended_html/D_QC_of_aligned_reads.Solutions.html)  
 
-16:30 - 17:30 Quantification with SubRead - Abbi Edwards  
+4. Quantification with SubRead - Abbi Edwards  
     - [Introductory slides](html/E_Read_Counts_with_Subread.html)  
-    - [Practical](html/E_Read_Counts_with_Subread.practical.html)  
-     - [Practical solutions](html/E_Read_Counts_with_Subread.Solutions.html)  
+    - [Practical](extended_html/E_Read_Counts_with_Subread.practical.html)  
+    - [Practical solutions](extended_html/E_Read_Counts_with_Subread.Solutions.html)  
 
 ### Day 2
 
-9:30 - 10:00  [Introduction to RNAseq Analysis in R](html/01_Introduction_to_RNAseq_Analysis_in_R.html)
- - Ashley Sawle
+1. [RNA-seq Pre-processing](extended_html/02_Preprocessing_Data.html)
 
-10:00 - 12:30 - [RNA-seq Pre-processing](html/02_Preprocessing_Data.html) -
-Stephane Ballereau  
-     - [Practical solutions](html/02_Preprocessing_Data.Solutions.html)  
+    - [Practical solutions](extended_html/02_Preprocessing_Data.Solutions.html)  
 
-13:30 - 17:00 Statistical Analysis of Bulk RNAseq Data - Dominique-Laurent  
-Couturier 
-    - [Slides](html/03-Statistical_Models.pdf)  
-    - [Practical](Course_Materials/03-Statistical_Models.Rmd)  
-
- 
 ### Day 3
 
-9:30 - 12:00 - [Differential Expression for
-RNA-seq](html/04_DE_analysis_with_DESeq2.html) - Ashley Sawle   
-     - [practical solutions](html/04_DE_analysis.Solutions.html)
+1. [Differential Expression for RNA-seq](extended_html/04_DE_analysis_with_DESeq2.html)
 
-12:00 - 13:00 Lunch
+    - [Practical solutions](extended_html/04_DE_analysis.Solutions.html)
 
-13:00 - 16:00 [Annotation and Visualisation of RNA-seq
-results](html/05_Annotation_and_Visualisation.html) - Abbi Edwards  
+2. [Annotation and Visualisation of RNA-seq results](extended_html/05_Annotation_and_Visualisation.html)
+
     - [practical 
-solutions](html/05_Annotation_and_Visualisation.Solutions.html)
+solutions](extended_html/05_Annotation_and_Visualisation.Solutions.html)
 
-16:00 - 17:30 [Gene-set testing](html/06_Gene_set_testing.html) - Ashley Sawle  
-     - [practical solutions](html/06_Gene_set_testing.Solutions.html)
+3, [Gene-set testing](extended_html/06_Gene_set_testing.html)
 
-> ## Prerequisites
->
-> __**Some basic experience of using a UNIX/LINUX command line is assumed**__
-> 
-> __**Some basic R knowledge is assumed (and is essential). Without it, you
-> will struggle on this course.**__ 
-> If you are not familiar with the R statistical programming language we
-> strongly encourage you to work through an introductory R course before
-> attempting these materials.
-> We recommend reading our [R crash 
-course](https://bioinformatics-core-shared-training.github.io/r-crash-course/)
-> before attending, which should take around 1 hour
->
+    - [practical solutions](extended_html/06_Gene_set_testing.Solutions.html)
 
 ## Source Materials for Practicals
 
@@ -119,7 +74,7 @@ repository](https://github.com/bioinformatics-core-shared-training/RNAseq_Septem
 
 Introductory R materials:
 
-- [R Crash Course](https://bioinformatics-core-shared-training.github.io/r-crash-course/)
+- [Introduction to R](https://bioinformatics-core-shared-training.github.io/r-intro/)
 
 Additional RNAseq materials:
 
