@@ -117,7 +117,7 @@ Couturier
     - [Slides]()  
     - [Practical]()  
 
-15:00 - 16:00 Experimental Design of Bulk RNAseq studies - Sankari Nagaran
+15:00 - 16:00 Experimental Design of Bulk RNAseq studies - Sankari Nagarajan
     - [Slides]()  
     - [Practical]()  
  
