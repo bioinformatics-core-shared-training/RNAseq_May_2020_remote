@@ -40,7 +40,7 @@ make adjusments to the course as we go.
 
 ## Google Document
 
-There is a [course Google Doc](https://docs.google.com/document/d/1CoSD_vdKrRiIu6sdC4TvIr71uUUittCTDYnc9VlTlpw/edit?usp=sharing). 
+There is a [Google Document](https://docs.google.com/document/d/1CoSD_vdKrRiIu6sdC4TvIr71uUUittCTDYnc9VlTlpw/edit?usp=sharing) for the course. 
 
 It contains useful information and links relevant to the course.
 
@@ -50,7 +50,7 @@ as they can.
 
 ## Course etiquette
 
-As this course is being taught onoine and there are a large number of participants,
+As this course is being taught online and there are a large number of participants,
 we will alls need to follow a [few simple rules](https://docs.google.com/presentation/d/e/2PACX-1vQv9nTlsdRC9iZJU138tLL1jrwNoryp8P-FnXxb_ugOOWjbav4QHTLYLLZj2KK4kTO0_3x3VlzSdrUu/pub?start=false&loop=false&delayms=3000) to ensure things run as smoothly as possible:
 
 1. Please mute your microphone
@@ -59,9 +59,9 @@ we will alls need to follow a [few simple rules](https://docs.google.com/present
 
     ![](images/raise_hand.png)
    
-   This can be found XXXXXXXXXXXXXXXXXXXXXXXXXXXX). A tutor will then contact
-   you in the chat. If necessary you and the tutor will be moved to a breakout
-   room where you can discuss your issue in person.
+   This can be found by clicking on the 'Participants' button. A tutor will
+   then contact you in the chat. If necessary, you and the tutor can be moved
+   to a breakout room where you will be discuss your issue in more detail.
 
 3. Please ask any general questions by typing in them into the Google Doc mentioned above
 
@@ -74,7 +74,7 @@ we will alls need to follow a [few simple rules](https://docs.google.com/present
 ## Timetable
 
 **As we have not taught this course remotely before, all times here should be
-regarded as estimates**
+regarded as aspirations**
 
 ### Day 1
 
