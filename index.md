@@ -55,14 +55,20 @@ we will alls need to follow a [few simple rules](https://docs.google.com/present
 
 1. Please mute your microphone
 
-2. To get help from a tutor, please click the "Raise Hand" button in zoom (this
-   can be found XXXXXXXXXXXXXXXXXXXXXXXXXXXX). A tutor will then contact you in
-   the chat. If necessary you and the tutor will be moved to a breakout room
-   where you can discuss your issue in person.
+2. To get help from a tutor, please click the "Raise Hand" button in Zoom:
+
+    ![](images/raise_hand.png)
+   
+   This can be found XXXXXXXXXXXXXXXXXXXXXXXXXXXX). A tutor will then contact
+   you in the chat. If necessary you and the tutor will be moved to a breakout
+   room where you can discuss your issue in person.
 
 3. Please ask any general questions by typing in them into the Google Doc mentioned above
 
-4. During practicals, please press the green "Yes" button when you are done,
+4. During practicals, when you are done, please press the green "Yes" button: 
+    
+    ![](images/yes_button.png)
+
    this way we will know when we can move on.
 
 ## Timetable
