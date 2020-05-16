@@ -177,69 +177,68 @@ summary {
 
 
 <h1 class="title toc-ignore">RNA-seq analysis in R</h1>
-<h3 class="subtitle">QC of Aligned Reads</h3>
+<h3 class="subtitle">QC of Aligned Reads - exercise solutions</h3>
 
 </div>
 
 
-<div id="checking-the-quality-of-the-aligned-data" class="section level1">
-<h1>Checking the quality of the aligned data</h1>
-<p>Once we have aligned our reads, it is then possible to run some additional quality checks on our data. In the first instance we will just look at some basic metrics such as the percentage of aligned reads and the duplication rates. We can then use some more sophisticated methods to assess the integrity of our RNA and genomic locations to which our reads are aligning.</p>
 <div id="a-quick-look-at-the-alignment-metrics-with-samtools" class="section level2">
 <h2>1. A quick look at the alignment metrics with <code>samtools</code></h2>
-<p>We previously used the <code>samtools</code> package to sort and index our bam file. <code>samtools</code> also includes some simple tools to generate alignment metrics. This can be very handy for a quick first look at our alignment quality. The tool we are going to use is called <code>flagstat</code></p>
-<p>The <strong>Usage</strong> is:</p>
-<pre><code>samtools flagstat &lt;in.bam&gt;</code></pre>
-<p>Where <code>&lt;in.bam&gt;</code> is the bam file we wish to QC.</p>
 <div id="exercise-1" class="section level3">
 <h3>Exercise 1</h3>
 <blockquote>
 <ol style="list-style-type: decimal">
 <li>Check your current working directory and if necessary navigate to the <code>Course_Materials/</code> directory using the command <code>cd</code> (change directory).</li>
-<li>Use the <code>samtools flagstat</code> command to generate alignment metrics for the sorted bam file you created in the previous practical.</li>
+</ol>
+<p><code>pwd</code> - to check <strong>p</strong>resent <strong>w</strong>working <strong>d</strong>irectory</p>
+<p><code>cd ~/Course_Materials</code> - if necessary</p>
+<ol start="2" style="list-style-type: decimal">
+<li><p>Use the <code>samtools flagstat</code> command to generate alignment metrics for the sorted bam file you created in the previous practical.<br />
+<code>samtools flagstat bam/MCL1.DL.sorted.bam</code></p>
+<pre><code>28281754 + 0 in total (QC-passed reads + QC-failed reads)
+2848597 + 0 secondary
+0 + 0 supplementary
+0 + 0 duplicates
+27199402 + 0 mapped (96.17% : N/A)
+0 + 0 paired in sequencing
+0 + 0 read1
+0 + 0 read2
+0 + 0 properly paired (N/A : N/A)
+0 + 0 with itself and mate mapped
+0 + 0 singletons (N/A : N/A)
+0 + 0 with mate mapped to a different chr
+0 + 0 with mate mapped to a different chr (mapQ&gt;=5)</code></pre></li>
 </ol>
 <ol start="17" style="list-style-type: upper-alpha">
-<li>What percentage of the reads have aligned to the genome?</li>
+<li>What percentage of the reads have aligned to the genome? - 96.17% of reads have been mapped to the reference genome.</li>
 </ol>
 </blockquote>
 </div>
 </div>
 <div id="more-detailed-metrics-with-picard-tools" class="section level2">
 <h2>2. More detailed metrics with Picard Tools</h2>
-<p><a href="https://broadinstitute.github.io/picard/"><strong>Picard Tools</strong></a> is a suite of tools for analysing and manipulating sequencing data. It is maintained by the Broad Institute and comprises 88 different tools for doing jobs such as generating QC metrics, modifying bam files in various ways, or converting files between different formats.</p>
-<p>We are going to use three QC metrics tools to get a variety of different important metrics.</p>
-<p>Picard is java based programme and so to run a particular Picard tool the general format for the command is:</p>
-<pre><code>java -jar picard/picard.jar PicardToolName OPTION1=value1 OPTION2=value2...</code></pre>
-<ul>
-<li><code>picard.jar</code> is the <strong>J</strong>ava <strong>AR</strong>chive file that contains all the tools. It can be found in the <em>picard</em> directory under <em>Course_Materials</em>.</li>
-<li><code>PicardToolName</code> is the name of the tools that you wish to use.</li>
-</ul>
-<p>This is then followed by a series of options/arguments for that particular tool. Each tool has specific options and arguments and you can check these most easily by going to the <a href="https://broadinstitute.github.io/picard/">Picard website</a>, or by using the `–help`` command:</p>
-<pre><code>java -jar picard/picard.jar PicardToolName --help</code></pre>
 <div id="duplication-metrics" class="section level3">
 <h3>2.1 Duplication metrics</h3>
-<p>The first tool we are going to use is the <code>MarkDuplicates</code> tools. This tool actually performs two tasks.</p>
-<p>First, Picard reads through the bam file and finds any duplicate reads - these are reads with the same 5’ position. For each group of duplicate reads, Picard selects a “primary” read based on the base quality scores and then marks all other reads in the group as “duplicates” by adding <strong>1024</strong> to the sam flag.</p>
-<p>Once the duplicate reads are marked, Picard then also generates a metrics file that contains information about the duplication rate.</p>
 </div>
 <div id="exercise-2.1" class="section level3">
 <h3>Exercise 2.1</h3>
 <blockquote>
 <ol style="list-style-type: decimal">
-<li><p>Run Picard’s MarkDuplicates tool on the sorted bam file using the following command:</p>
+<li>Run Picard’s MarkDuplicates tool on the sorted bam file using the following command:</li>
+</ol>
+</blockquote>
 <pre><code>java -jar picard/picard.jar MarkDuplicates \
      INPUT=bam/MCL1.DL.sorted.bam \
      OUTPUT=bam/MCL1.DL.mkdup.bam \
      METRICS_FILE=bam/MCL1.DL.mkdup_metrics.txt \
      CREATE_INDEX=true</code></pre>
-<p><strong>Note</strong>: The <code>\</code> at the end of each line tells the terminal that when you press <code>Enter</code>, you have not yet finished typing the command. You can if you wish, type the whole command on a single line, omitting the <code>\</code>. The command is written across multiple lines here just to make it easier to read.</p></li>
-</ol>
-<p>Q. What is the duplication rate for this bam file?</p>
+<blockquote>
+<p><strong>Note</strong>: The <code>\</code> at the end of each line tells the terminal that when you press <code>Enter</code>, you have not yet finished typing the command. You can if you wish, type the whole command on a single line, omitting the <code>\</code> - The command is written across multiple lines here just to make it easier to read.</p>
+<p>Q. What is the duplication rate for this bam file? ~55%. Note that although the column headers for Picard say “PERCENT” or “PCT” the number is in fact the decimal fraction and need to be multiplied by 100 for percent. Just an odd quirk of Picard.</p>
 </blockquote>
 </div>
 <div id="alignment-metrics" class="section level3">
 <h3>2.2 Alignment metrics</h3>
-<p>Next we will collect some detailed alignment metrics using the <code>CollectAlignmentSummaryMetrics</code> tool. In this case we need to provide an input bam, the name of the output metrics file and the fasta reference.</p>
 </div>
 <div id="exercise-2.2" class="section level3">
 <h3>Exercise 2.2</h3>
@@ -248,29 +247,21 @@ summary {
 <li>Run Picard’s <code>CollectAlignmentSummaryMetrics</code> tool on the sorted bam providing the following options.
 <ul>
 <li>INPUT - The sorted bam file</li>
-<li>OUTPUT - bam/MCL1.DL.alignment_metrics.bam</li>
-<li>REFERENCE_SEQUENCE - references/Mus_musculus.GRCm38.dna.primary_assembly.fa</li>
+<li>OUTPUT - “bam/MCL1.DL.alignment_metrics.bam”</li>
+<li>REFERENCE_SEQUENCE - “references/Mus_musculus.GRCm38.dna.primary_assembly.fa”</li>
 </ul></li>
 </ol>
-<p>Q. What is the mismatch rate? This is the fraction of bases in mapped reads that do not match the base at that position in the reference genome. This is a combination of the number of SNPs and sequencing errors.</p>
+</blockquote>
+<pre><code>java -jar picard/picard.jar CollectAlignmentSummaryMetrics \
+     INPUT=bam/MCL1.DL.sorted.bam \
+     OUTPUT=bam/MCL1.DL.alignment_metrics.txt \
+     REFERENCE_SEQUENCE=references/Mus_musculus.GRCm38.dna.primary_assembly.fa</code></pre>
+<blockquote>
+<p>Q. What is the mismatch rate? This is the fraction of bases in mapped reads that do not match the base at that position in the reference genome. This is a combination of the number of SNPs and sequencing errors. - 0.2308 %</p>
 </blockquote>
 </div>
 <div id="rna-alignment-metrics" class="section level3">
 <h3>2.3 RNA alignment metrics</h3>
-<p>The <code>CollectRnaSeqMetrics</code> tool produces metrics describing the distribution of the reads across different genomics locations - intronic, exonic, intergenic, UTR - and the distribution of bases within the transcripts.</p>
-<p>The <code>CollectRnaSeqMetrics</code> requires four pieces of information to run:</p>
-<ol style="list-style-type: decimal">
-<li>The input bam file<br />
-</li>
-<li>An file name for the output metrics file</li>
-<li>A file containing gene annotations in a format called RefFlat that is defined <a href="http://genome.ucsc.edu/goldenPath/gbdDescriptionsOld.html#RefFlat">here</a>. This format can be generated from a gtf file. We’ve already generated this file for you at <code>references/Mus_musculus.GRCm38.97.txt</code><br />
-</li>
-<li>A parameter for strand specificity. Strand specificity is factor of the library prep chemistry. There are three possible options:<br />
-a) Forward stranded library prep, i.e. the reads are on the transcription strand - FIRST_READ_TRANSCRIPTION_STRAND<br />
-b) Reverse stranded library prep, i.e. the reads are on the reverse strand - SECOND_READ_TRANSCRIPTION_STRAND<br />
-c) Unstranded library prep, i.e. the reads may be on either strand - NONE<br />
-With your own data you would need to find this information out from whoever has prepared the library. In this case our library prep is unstranded, so we will use <code>NONE</code>.</li>
-</ol>
 </div>
 <div id="exercise-2.3" class="section level3">
 <h3>Exercise 2.3</h3>
@@ -279,39 +270,58 @@ With your own data you would need to find this information out from whoever has 
 <li>Run Picard’s <code>CollectRnaSeqMetrics</code> tool on the sorted bam file providing the following options:
 <ul>
 <li>INPUT - The sorted bam file</li>
-<li>OUTPUT - bam/MCL1.DL.RNA_metrics.txt</li>
+<li>OUTPUT - “bam/MCL1.DL.RNA_metrics.txt”</li>
 <li>REF_FLAT - the RefFlat reference file</li>
-<li>STRAND - NONE</li>
+<li>STRAND - “NONE”</li>
 </ul></li>
 </ol>
+</blockquote>
+<pre><code>java -jar picard/picard.jar CollectRnaSeqMetrics \
+     INPUT=bam/MCL1.DL.sorted.bam \
+     REF_FLAT=references/Mus_musculus.GRCm38.97.txt \
+     OUTPUT=bam/MCL1.DL.RNA_metrics.txt \
+     STRAND=NONE</code></pre>
+<blockquote>
 <p>The results of this analysis are best viewed graphically, we will do this in the next exercise.</p>
 </blockquote>
 </div>
 </div>
 <div id="visualising-qc-results-with-multiqc" class="section level2">
 <h2>3. Visualising QC results with MultiQC</h2>
-<p><a href="https://multiqc.info/">MultiQC</a> is a tool for collating multiple QC results files into a single report. It’s use is simple, you just run the command <code>multiqc</code> in the directory containing your metrics files.</p>
 <div id="exercise-3.1" class="section level3">
 <h3>Exercise 3.1</h3>
 <blockquote>
 <ol style="list-style-type: decimal">
 <li>Move into the bam directory and run multiqc: <code>multiqc .</code> - the <code>.</code> specifies “the current directory”.</li>
-<li>Open the html report that was generated by multiqc and inspect the QC plots The easiest way to do this is type <code>xdg-open multiqc_report.html</code>, which will oprn the report in a web browser.</li>
 </ol>
 </blockquote>
+<pre><code>cd bam
+multiqc .</code></pre>
+<blockquote>
+<ol start="2" style="list-style-type: decimal">
+<li>Open the html report that was generated by multiqc and inspect the QC plots</li>
+</ol>
+</blockquote>
+<pre><code>xdg-open mutliqc_report.html</code></pre>
 </div>
 <div id="exercise-3.2" class="section level3">
 <h3>Exercise 3.2</h3>
 <blockquote>
-<p>In the <code>metrics</code> directory you should find Picard metrics for all of the bam files.</p>
-<ol style="list-style-type: decimal">
-<li>Run multiqc in the metrics directory.<br />
-</li>
+<p>In the <code>metrics</code> directory you should find Picard metrics for all of the bam files.<br />
+1. Run multiqc in the metrics directory.<br />
+Assuming that you are still in the <code>bam</code> directory:</p>
+</blockquote>
+<pre><code>cd .. # to move back up to the Course_Materials directory
+cd metrics
+multiqc .</code></pre>
+<blockquote>
+<ol start="2" style="list-style-type: decimal">
 <li>Open the html report that was generated by multiqc and inspect the QC plots</li>
 </ol>
 <p>Q. Are there any bam files that look problematic?</p>
+<p>From the Alignment Summary plot we can see that the sample MCL1.DM that has only 9.8 million reads. This is not going to be sufficient for a good quality analysis and we should exclude this sample.</p>
+<p>From the Gene Coverage plot we can see that there is one sample MCL1.LG that exhibits a pattern of coverage suggesting that the mRNA is degraded.</p>
 </blockquote>
-</div>
 </div>
 </div>
 
