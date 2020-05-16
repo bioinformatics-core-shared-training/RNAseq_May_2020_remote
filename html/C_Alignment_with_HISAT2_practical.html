@@ -287,15 +287,16 @@ references/hisat2_index_chr1/grcm38.8.ht2</code></pre>
 <blockquote>
 <ol style="list-style-type: decimal">
 <li>Make a directory called <code>bam</code> (BAM will be the final format of our aligned data, but we have one more step after alignment to get there).</li>
-<li>Use hisat2 to align the fastq file. Use the following parameters
+<li>Use HISAT2 to align the fastq file. Use the following parameters
 <ul>
 <li>Index (the full genome this time) - <code>references/hisat2_index/mmu.GRCm38</code></li>
 <li>Fastq file with unpaired reads - <code>fastq/MCL1.DL.fastq.gz</code></li>
 <li>Output file - <code>bam/MCL1.DL.sam</code></li>
 <li>Set the number of threads (number of processors to use) to 7 - check the help page to find the appropriate flag</li>
+<li>Add the <code>-t</code> flag so that HISAT2 will print a time log to the console</li>
 </ul></li>
 </ol>
-<p><strong>Note</strong>: when the <code>hisat2</code> command runs successfully, there will be no indication that it is doing anything except that the command prompt disappears and the terminal will appear <em>frozen</em> (this is a <em>helpful</em> feature of many unix/linux tools). The alignment may take 5-10 minutes - go get a nice cup of tea.</p>
+<p><strong>Note</strong>: The alignment may take 5-10 minutes - go get a nice cup of tea.</p>
 </blockquote>
 </div>
 </div>

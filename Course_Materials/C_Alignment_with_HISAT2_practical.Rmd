@@ -185,18 +185,15 @@ should stick to the defaults.
 
 > 1. Make a directory called `bam` (BAM will be the final format of our aligned 
 >    data, but we have one more step after alignment to get there).
-> 2. Use hisat2 to align the fastq file. Use the following parameters
+> 2. Use HISAT2 to align the fastq file. Use the following parameters
 >       * Index (the full genome this time) - `references/hisat2_index/mmu.GRCm38`
 >       * Fastq file with unpaired reads - `fastq/MCL1.DL.fastq.gz`
 >       * Output file - `bam/MCL1.DL.sam`
 >       * Set the number of threads (number of processors to use) to 7 - check
 >         the help page to find the appropriate flag
+>       * Add the `-t` flag so that HISAT2 will print a time log to the console
 > 
-> **Note**: when the `hisat2` command runs successfully, there will be no
-> indication that it is doing anything except that the command prompt
-> disappears and the terminal will appear *frozen* (this is a *helpful* feature
-> of many unix/linux tools). The alignment may take 5-10 minutes - go get a nice 
-> cup of tea.
+> **Note**: The alignment may take 5-10 minutes - go get a nice cup of tea.
 
 ## 3 Convert the SAM output to BAM 
 
