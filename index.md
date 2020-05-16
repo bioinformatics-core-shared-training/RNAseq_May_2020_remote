@@ -34,7 +34,7 @@ differential expression analysis of RNA-seq data.
 
 Whilst we have run this course for several years, this is the first time that
 we will be teaching it remotely. Please bear with us if there are any
-techinical hitches, and be aware that timings for different sections laid out
+technical hitches, and be aware that timings for different sections laid out
 in the schedule below may not be adhered to. There may be some necessity to
 make adjusments to the course as we go.
 
