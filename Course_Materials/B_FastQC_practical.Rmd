@@ -1,7 +1,7 @@
 ---
 title: "RNA-seq analysis in R"
-subtitle: "QC of raw reads with FastQC"
 author: "Stephane Ballereau, Dominique-Laurent Couturier, Abbi Edwards, Ashley Sawle"
+subtitle: QC of raw reads with FastQC
 ---
 
 In our intial QC of the raw fastq file we will be interested in gathering
