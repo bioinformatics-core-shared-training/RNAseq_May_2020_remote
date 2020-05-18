@@ -78,15 +78,17 @@ regarded as aspirations**
 
 ### Day 1
 
-9:30 - 10:00 - [Introduction to RNAseq
+9:30 - 9:45 - Welcome!
+
+9:45 - 10:15 - [Introduction to RNAseq
 Methods](html/A_Introduction_to_RNAseq_Methods.html) - Sankari Nagarajan
 
-10:00 - 11:00 Raw read file format and QC - Abbi Edwards  
+10:15 - 11:15 Raw read file format and QC - Abbi Edwards  
     - [Introductory slides](html/B_FastQC.html)  
     - [Practical](html/B_FastQC_practical.html)  
 <!--     - [Practical solutions](html/B_FastQC_practical.Solutions.html)  -->
 
-11:00 - 12:30 Short read alignment with HISAT2 - Ashley Sawle  
+11:15 - 12:30 Short read alignment with HISAT2 - Ashley Sawle  
     - [Introductory slides](html/C_Alignment_with_HISAT2.html)  
     - [Practical](html/C_Alignment_with_HISAT2_practical.html)  
 <!--    - [Practical solutions](html/C_Alignment_with_HISAT2.Solutions.html)  -->
