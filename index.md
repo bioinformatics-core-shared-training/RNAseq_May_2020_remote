@@ -105,15 +105,14 @@ Methods](html/A_Introduction_to_RNAseq_Methods.html) - Sankari Nagarajan
 
 ### Day 2
 
-9:30 - 10:00  [Introduction to RNAseq Analysis in R](html/01_Introduction_to_RNAseq_Analysis_in_R.html)
- - Sankari Nagarajan 
+9:30 - 10:00  [Introduction to RNAseq Analysis in R](html/01_Introduction_to_RNAseq_Analysis_in_R.html) - Sankari Nagarajan 
 
 10:00 - 12:00 - [RNA-seq Pre-processing](html/02_Preprocessing_Data.html) -
 Stephane Ballereau  
 <!--     - [Practical solutions](html/02_Preprocessing_Data.Solutions.html)   -->
 
 13:00 - 15:00 Statistical Analysis of Bulk RNAseq Data - Dominique-Laurent  
-Couturier 
+Couturier   
     - [Slides]()  
     - [Practical]()  
 
