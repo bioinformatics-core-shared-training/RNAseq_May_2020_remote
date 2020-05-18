@@ -19,7 +19,7 @@ library(tidyverse)
 ```
 
 ```{r prepareData, echo=FALSE, message=FALSE, warning=FALSE}
-load("Robjects/DE.RData")
+load("../Robjects/DE.RData")
 ```
 
 ### Challenge 1
@@ -43,7 +43,7 @@ ourCols <- c("SYMBOL", "GENEID", "ENTREZID", "GENEBIOTYPE")
 ourKeys <- rownames(resLvV)
 
 # run the query
-annot <- select(EnsDb.Mmusculus.v79, 
+annot <-AnnotationDbi::select(EnsDb.Mmusculus.v79, 
                 keys=ourKeys, 
                 columns=ourCols, 
                 keytype="GENEID")
@@ -65,6 +65,17 @@ means that more significant genes have a higher scale).
 
 
 ```{r volcanoPlot, fig.height=5, fig.width=7}
+# First load data and annotations
+load("../Robjects/DE.RData")
+load("../Robjects/Ensembl_annotations.RData")
+
+#Shrink our values
+ddsShrink <- lfcShrink(ddsObj, coef="Status_lactate_vs_virgin")
+shrinkLvV <- as.data.frame(ddsShrink) %>%
+    rownames_to_column("GeneID") %>% 
+    left_join(ensemblAnnot, "GeneID") %>% 
+    rename(logFC=log2FoldChange, FDR=padj)
+
 # first remove the filtered genes (FDR=NA) and create a -log10(FDR) column
 filtTab <- shrinkLvV %>% 
     filter(!is.na(FDR)) %>% 
@@ -75,20 +86,3 @@ ggplot(filtTab, aes(x = logFC, y=`-log10(FDR)`)) +
 ```
 
 
-### Challenge 3 - In Supplementary Materials
-
-Use the txMm to retrieve the exon coordinates for the genes: 
-
-> * `ENSMUSG00000021604`  
-> * `ENSMUSG00000022146`  
-> * `ENSMUSG00000040118`   
-
-
-```{r solutionChallenge3, warning=FALSE, message=FALSE}
-keyList <- c("ENSMUSG00000021604", "ENSMUSG00000022146", "ENSMUSG00000040118")
-AnnotationDbi::select(txMm, 
-       keys=keyList,
-       keytype = "GENEID",
-       columns=c("TXNAME", "TXCHROM", "TXSTART", "TXEND", "TXSTRAND", "TXTYPE")
-      )
-```

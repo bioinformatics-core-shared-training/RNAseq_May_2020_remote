@@ -76,7 +76,7 @@ ourCols <- c("SYMBOL", "GENEID", "ENTREZID")
 ourKeys <- rownames(resLvV)[1:1000]
 
 # run the query
-annot <- select(EnsDb.Mmusculus.v79, 
+annot <- AnnotationDbi::select(EnsDb.Mmusculus.v79, 
                 keys=ourKeys, 
                 columns=ourCols, 
                 keytype="GENEID")
