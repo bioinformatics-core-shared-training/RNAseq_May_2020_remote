@@ -306,7 +306,15 @@ ddsObj <- DESeq(ddsObj.raw)
 resLvV <- results(ddsObj, alpha=0.05)
 ```
 
-# Should be using the interactive model?
+# Should be using the interaction model?
+
+So far we have modelled gene expression as a function of status and cell type 
+with an additive model. It is possible that the two factors interact such that
+differences in gene expression between different cell types are not the same
+across all three mouse statuses:
+
+![](../images/AdditiveAndInteractionModels.png)
+[*pdf version*](../images/AdditiveAndInteractionModels.pdf)
 
 Let's plot a PCA from `vst` transformed data. 
 Can you anticipate if the interaction term will be important?
