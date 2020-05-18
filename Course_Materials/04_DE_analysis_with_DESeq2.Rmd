@@ -356,10 +356,10 @@ a significance threshold (e.g. padj < 0.05) then we should consider using the
 more complex model for this gene. 
 
 ```{r}
-table(resCvCS$padj < 0.05)
+sum(resCvCS$padj < 0.05, na.rm=TRUE)
 ```
 
-We can see that for `r sum(resCvCS$pad < 0.05, na.rm=TRUE)` genes the more 
+We can see that for `r sum(resCvCS$padj < 0.05, na.rm=TRUE)` genes the more 
 complex model does fit the data better. This would suggest that we should be
 including both terms in the linear model.
 

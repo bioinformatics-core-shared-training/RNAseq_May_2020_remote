@@ -532,11 +532,9 @@ resCvCS</code></pre>
 <p>The second line of the results output shows us the test we are doing:</p>
 <p><code>LRT p-value: '~ CellType + Status' vs '~ CellType'</code></p>
 <p>The null hypothesis is that there is no significant difference between the two models, i.e. the simpler model is sufficient to explain the variation in gene expression between the samples. If the the adjusted p-value for a gene passes a significance threshold (e.g. padj &lt; 0.05) then we should consider using the more complex model for this gene.</p>
-<pre class="r"><code>table(resCvCS$padj &lt; 0.05)</code></pre>
-<pre><code>## 
-## FALSE  TRUE 
-## 13010  7932</code></pre>
-<p>We can see that for 0 genes the more complex model does fit the data better. This would suggest that we should be including both terms in the linear model.</p>
+<pre class="r"><code>sum(resCvCS$padj &lt; 0.05, na.rm=TRUE)</code></pre>
+<pre><code>## [1] 7932</code></pre>
+<p>We can see that for 7932 genes the more complex model does fit the data better. This would suggest that we should be including both terms in the linear model.</p>
 <p>Although we have a result for each gene, in practice we should choose one model or the other and apply it to all genes.</p>
 <div id="exercise-2" class="section level3">
 <h3>Exercise 2</h3>

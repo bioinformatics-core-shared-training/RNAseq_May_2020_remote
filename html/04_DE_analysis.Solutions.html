@@ -211,7 +211,26 @@ ddsObj.raw &lt;- DESeqDataSetFromMatrix(countData = countdata,
 <pre class="r"><code>resultsNames(ddsObj)</code></pre>
 <pre><code>## [1] &quot;Intercept&quot;                  &quot;CellType_luminal_vs_basal&quot; 
 ## [3] &quot;Status_pregnant_vs_lactate&quot; &quot;Status_virgin_vs_lactate&quot;</code></pre>
-<pre class="r"><code>resBvL &lt;- results(ddsObj, alpha=0.05, name=&quot;CellType_luminal_vs_basal&quot;)</code></pre>
+<pre class="r"><code>resBvL &lt;- results(ddsObj, alpha=0.05, name=&quot;CellType_luminal_vs_basal&quot;)
+resBvL</code></pre>
+<pre><code>## log2 fold change (MLE): CellType luminal vs basal 
+## Wald test p-value: CellType luminal vs basal 
+## DataFrame with 25369 rows and 6 columns
+##                       baseMean log2FoldChange     lfcSE       stat       pvalue
+##                      &lt;numeric&gt;      &lt;numeric&gt; &lt;numeric&gt;  &lt;numeric&gt;    &lt;numeric&gt;
+## ENSMUSG00000051951  194.697167       -9.84263  0.940542 -10.464855  1.25268e-25
+## ENSMUSG00000102331    0.557693       -2.17264  2.244934  -0.967796  3.33146e-01
+## ENSMUSG00000025900    3.838125        4.16201  1.057538   3.935563  8.30020e-05
+## ENSMUSG00000025902   52.523551       -2.67254  0.341351  -7.829312  4.90547e-15
+## ENSMUSG00000098104    0.686876       -1.34807  1.458074  -0.924552  3.55199e-01
+##                            padj
+##                       &lt;numeric&gt;
+## ENSMUSG00000051951  1.92854e-24
+## ENSMUSG00000102331           NA
+## ENSMUSG00000025900  2.25328e-04
+## ENSMUSG00000025902  3.85988e-14
+## ENSMUSG00000098104           NA
+##  [ reached getOption(&quot;max.print&quot;) -- omitted 6 rows ]</code></pre>
 <ol start="2" style="list-style-type: lower-alpha">
 <li>How many significantly upregulated genes are there?</li>
 </ol>

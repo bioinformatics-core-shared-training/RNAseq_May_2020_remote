@@ -41,6 +41,7 @@ a) Obtain results for luminal vs basal.  Call the new results object `resLvB`.
 ```{r}
 resultsNames(ddsObj)
 resBvL <- results(ddsObj, alpha=0.05, name="CellType_luminal_vs_basal")
+resBvL
 ```
 
 
