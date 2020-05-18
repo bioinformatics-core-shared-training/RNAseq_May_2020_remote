@@ -1,6 +1,6 @@
 ---
 title: "Introduction to RNAseq analysis in R"
-author: "Ashley Sawle"
+author: "Sankari Nagarajan"
 date: "May 2020"
 output:
   ioslides_presentation:
