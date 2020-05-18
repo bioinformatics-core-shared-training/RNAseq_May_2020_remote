@@ -232,19 +232,21 @@ topGenesPvV
 
 ### Exercise 1
 
-> So far we have fitted a simple model considering just "Status". We want to model
-> the effects of both "Status" and "Cell Type".
+> So far we have fitted a simple model considering just "Status", but in reality 
+> we want to model the effects of both "Status" and "Cell Type".
 > 
 > Let's start with the model with only main effects - an additive model with no 
-> interaction. The main assumption here is that the effect of the status is the 
-> same in both types of cells.
+> interaction. The main assumption here is that the effect of the status on gene 
+> expression is the same in both types of cells.
 > 
 > First we will recapitulate the above steps to generate a new DESeq2 object with
-> the additive modeln. Then we will extract the results table for the contrast
+> the additive model. Then we will extract the results table for the contrast
 > for "lactate v virgin".
 > 
-> 1. Load the raw data. Remember to transform the Status into a factor in the 
->    sample sheet and set "Virgin" to be the first level.
+> 1. Load the raw data.   
+>    Remember that we would like R to use 'Virgin' in the intercept of the mode,
+>    so we need to transform the Status into a factor in the sample sheet and 
+>    set "Virgin" to be the first level.
 >   
 > ```{r}
 > load("Robjects/preprocessing.RData")
@@ -252,16 +254,15 @@ topGenesPvV
 >                             levels = c("virgin", "pregnant", "lactate"))
 > ```
 > 
-> 
 > 2. Create the model
 > 
-> ```{r}
+> ```{r eval=FALSE}
 > design <- as.formula(~ CellType + Status)
 > ```
 > 
 > 2. Then build the DESeq from the raw data, the sample meta data and the model
 > 
-> ```{r}
+> ```{r eval=FALSE}
 > ddsObj.raw <- DESeqDataSetFromMatrix(countData = countdata,
 >                                      colData = sampleinfo,
 >                                      design = design)
@@ -269,25 +270,27 @@ topGenesPvV
 > 
 > 3. Run the DESeq2 analysis
 > 
-> ```{r}
+> ```{r eval=FALSE}
 > ddsObj <- DESeq(ddsObj.raw)
 > ```
 > 
 > 4. Extract the default contrast - Lacate v Virgin
-> ```{r}
+>
+> ```{r eval=FALSE}
 > resLvV <- results(ddsObj, alpha=0.05)
 > ```
 > 
-> #### Challenge 1 {.challenge}
+> #### **Challenge 1** {.challenge}
 >
-> a) Obtain results for luminal vs basal.  > Call the new results object `resBvL`.
+> a) Obtain results for luminal vs basal.  Call the new results object `resLvB`.
 > b) How many significantly upregulated genes are there?
 >
-> #### Challenge 2 - Contrasts {.challenge} 
+> #### **Challenge 2 - Contrasts** {.challenge} 
 >
-> Suppose we want to find differentially expressed genes between **pregnant**
-> and **lactate**. We don't have a parameter that explicitly will allow us to
-> test that hypothesis. We need to provide a contrast.
+> Suppose we want to find genes that are  differentially expressed between 
+> **pregnant** and **lactate**. We don't have a parameter that explicitly will 
+> allow us to test that hypothesis. We need to provide a contrast.
+>   
 > Look at the help page for `results` (`?results`) and read about the `contrast`
 > argument (also look at Example 1 at the bottom of the help page)
 > 
@@ -317,14 +320,20 @@ Maybe, but we can't be sure so we need a way to compare the two models.
 
 ## Comparing two design models
 
+Let's take a simple example to start with.
+
 Suppose we thought that maybe `status` were irrelevant and really the only 
-differences might be between cell types. We could fit a simpler model, this 
+differences might be between cell types. We could fit a simpler model and this 
 would give us more degrees of freedom and therefore more power, but how
 would we know if it was a better model of not? 
 
-We can compare the two models using the "likelihood ratio test" (LRT). To do so
-we provide the LRT with a simpler (reduced) model than the one currently be 
-used. Currently `ddsObj` is using the model `~CellType + Status`.
+We can compare two models using the "likelihood ratio test" (LRT). 
+
+To do so we provide the LRT with a simpler model (one with less parameters) than
+the one currently be used. 
+
+Currently `ddsObj` is using the model `~CellType + Status`. Here we want to
+compare to a model without the `Status` parameter: `~CellType`
 
 ```{r compareModels}
 # create the simpler model
@@ -365,14 +374,20 @@ or the other and apply it to all genes.
 > #### Challenge {.challenge}
 >  
 > 1. Create a new DESeq2 object using a model with an interaction between 
->    CellType and Status (`~ CellType * Status`)  
-> 2. Use the LRT to compare the two models.  
+>    CellType and Status. The model formula should be 
+>    `~CellType + Status + CellType:Status`, where `CellType:Status` is the 
+>     parameter for the interaction beteween CellType and> Status.
+>
+> Note that `*` can be used as shortcut to add the interaction term,
+> e.g. `~CellType * Status`, however, writing out in long form is clearer here.
+>
+> 2. Use the LRT to compare this to the simpler additive model 
+>    (`~CellType + Status`)
 > 3. For how many genes is interaction model a better fit?  
 > 4. Do you think the experimental design is good enough to include the 
 >    interaction? If not, why?    
 
-
-```{r echo=FALSE, include=FALSE}
+```{r eval=FALSE, echo=FALSE, include=FALSE}
 design <- as.formula(~ CellType * Status)
 ddsObj2.raw <- DESeqDataSetFromMatrix(countData = countdata, 
                                      colData = sampleinfo,
@@ -381,7 +396,7 @@ ddsObj2.raw <- DESeqDataSetFromMatrix(countData = countdata,
 design.reduced <- as.formula(~ CellType + Status)
 
 # Compare the two designs
-ddsObjC2 <- DESeq(ddsObj2, test="LRT", reduced=design.reduced)
+ddsObjC2 <- DESeq(ddsObj2.raw, test="LRT", reduced=design.reduced)
 resCSvCxS <- results(ddsObjC2)
 table(resCSvCxS$padj < 0.05)
 ```

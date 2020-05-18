@@ -1,79 +1,107 @@
 ---
 title: "RNA-seq analysis in R"
-subtitle: "Differential Expression of RNA-seq data - Solutions"
+subtitle: "Differential Expression of RNA-seq data"
 author: "Stephane Ballereau, Dominique-Laurent Couturier, Mark Dunning, Abbi Edwards, Ashley Sawle"
 date: '`r format(Sys.time(), "Last modified: %d %b %Y")`'
-output:
-  html_document:
-    toc: yes
-    toc_float: yes
-minutes: 300
-layout: page
+output:  html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, echo=FALSE}
+options(tibble.print_max = 4, tibble.print_min = 4, max.print=40, 
+        tibble.max_extra_cols=2)
 ```
 
-```{r, include=FALSE}
+```{r echo=FALSE, message = FALSE}
 library(tidyverse)
 library(DESeq2)
-```
 
-```{r prepareData, include=F}
+# load the RData object we created in the previous session
 load("../Robjects/preprocessing.RData")
-# Specify a model
+```
+
+### Exercise 1
+
+First we will recapitulate the above steps to generate a new DESeq2 object with
+the additive model. Then we will extract the results table for the contrast
+for "lactate v virgin".
+
+```{r}
 design <- as.formula(~ CellType + Status)
-# set virgin to base line
-sampleinfo$Status <- factor(sampleinfo$Status, 
-                              levels = c("virgin", "pregnant", "lactate"))
-# rebuild a clean DDS object
-ddsObj <- DESeqDataSetFromMatrix(countData = countdata,
-                              colData = sampleinfo,
-                              design = design)
-# Run DESeq
-ddsObj <- DESeq(ddsObj)
+ddsObj.raw <- DESeqDataSetFromMatrix(countData = countdata, 
+                                     colData = sampleinfo,
+                                     design = design)
+ddsObj <- DESeq(ddsObj.raw)
+resLvV <- results(ddsObj, alpha=0.05)
+```
+
+#### **Challenge 1** {.challenge}
+
+a) Obtain results for luminal vs basal.  Call the new results object `resLvB`.
+
+```{r}
+resultsNames(ddsObj)
+resBvL <- results(ddsObj, alpha=0.05, name="CellType_luminal_vs_basal")
 ```
 
 
-### Challenge 1
+b) How many significantly upregulated genes are there?
 
-Obtain results for luminal vs basal and find the top 200 genes (call the new
-results object `resLvB`.
-
-```{r solutionChallenge1}
-resLvB <- results(ddsObj, name="CellType_luminal_vs_basal", alpha=0.05)
-topGenesLvB <- as.data.frame(resLvB) %>%
-    rownames_to_column("GeneID") %>% 
-    arrange(padj) %>%
-    head(200)
-head(topGenesLvB, 10)
+```{r}
+sum(resBvL$padj < 0.05 & resBvL$log2FoldChange > 0, na.rm = TRUE)
 ```
 
-### Challenge 2
+#### **Challenge 2 - Contrasts** {.challenge} 
+
+Suppose we want to find genes that are  differentially expressed between 
+**pregnant** and **lactate**. We don't have a parameter that explicitly will 
+allow us to test that hypothesis. We need to provide a contrast.
+Look at the help page for `results` (`?results`) and read about the `contrast`
+argument (also look at Example 1 at the bottom of the help page)
+
+Use the `contrast` argument to extract the results table for "pregnant v
+lactate".
+
+```{r}
+resPvL <- results(ddsObj, 
+                  alpha=0.05,
+                  contrast = c("Status", "pregnant", "lactate"))
+resPvL
+```
+
+
+
+### Exercise 2
 
 When we looked at the PCA it did seem that an interaction model might be
-warranted. Let's test that.   
+warranted. Let's test that.  
 
-> 1. Fit a model with interaction: What is the rationale to include the 
-> interaction?  
-> 2. Use the LRT to compare the two models.  
-> 3. Is the number of replicates good enough to include the interaction?  
-> 4. Is the interaction needed in the model?  
+1. Create a new DESeq2 object using a model with an interaction between 
+   CellType and Status (`~ CellType * Status`)
 
-```{r solutionChallenge2}
-designI <- as.formula(~ CellType * Status)
-
-# Build model
-ddsObjI <- DESeqDataSetFromMatrix(countData = countdata,
-                              colData = sampleinfo,
-                              design = designI)
-# Run DESeq
-ddsObjI <- DESeq(ddsObjI)
-
-# Compare the models
-ddsObjI <- DESeq(ddsObjI, test="LRT", reduced=design)
-resIvA <- results(ddsObjI)
-head(resIvA)
-length(which(resIvA$padj<=0.05))
+```{r}
+design <- as.formula(~ CellType * Status)
+ddsObj2.raw <- DESeqDataSetFromMatrix(countData = countdata, 
+                                     colData = sampleinfo,
+                                     design = design)
 ```
+
+2. Use the LRT to compare this to the simpler additive model 
+  (`~CellType + Status`)
+
+```{r}
+# create the simpler model
+design.reduced <- as.formula(~ CellType + Status)
+
+# Compare the two designs
+ddsObjC2 <- DESeq(ddsObj2.raw, test="LRT", reduced=design.reduced)
+resCSvCxS <- results(ddsObjC2)
+```
+
+3. For how many genes is interaction model a better fit?  
+
+```{r}
+sum(resCSvCxS$padj < 0.05, na.rm=TRUE)
+```
+
+--------------------
+
