@@ -6,14 +6,13 @@ date: '`r format(Sys.time(), "Last modified: %d %b %Y")`'
 output:
   html_document:
     toc: yes
-  html_notebook:
-    toc: yes
-minutes: 300
-layout: page
 bibliography: ref.bib
-editor_options: 
-  chunk_output_type: inline
 ---
+
+```{r setup, echo=FALSE}
+options(tibble.print_max = 4, tibble.print_min = 4, max.print=40, 
+        tibble.max_extra_cols=2)
+```
 
 # Recap of pre-processing
 
@@ -47,7 +46,7 @@ pre-processing tutorial.
 
 First load the packages we need.
 
-```{r setup, message = FALSE}
+```{r message = FALSE}
 library(tidyverse)
 library(DESeq2)
 ```
@@ -81,16 +80,16 @@ First we need to create a design model formula for our analysis. `DESeq2` will
 use this to generate the model matrix, as we have seen in the linear models 
 lecture. 
 
-We have two variables: "status"" and "cell type". We will fit two models under 
-two assumptions: no interaction and interaction of these two factors. 
+We have two variables in our experiment: "Status" and "Cell Type". 
 
-Let's start with the model with only main effects, that is no interaction. 
-The main assumption here is that the effect of the status is the same in both 
-type of cells.
+We will fit two models under two assumptions: no interaction and interaction of
+these two factors, however, to demonstrate the how DESeq2 is used we will start
+with a simple model which considers Status but ignores Cell Type 
+
 
 ```{r modelForumla}
 # Use the standard R 'formula' syntax for an additive model
-design <- as.formula(~ CellType + Status)
+design <- as.formula(~ Status)
 ```
 
 What does this look like as a model matrix?
@@ -122,15 +121,6 @@ ddsObj.raw <- DESeqDataSetFromMatrix(countData = countdata,
                                      design = design)
 ```
 
-# Data exploration
-
-Let's plot a PCA from `vst` transformed data. 
-Can you anticipate if the interaction term will be important?
-
-```{r pcaPlot, fig.width=5, fig.height=5}
-vstcounts <- vst(ddsObj.raw, blind=TRUE)
-plotPCA(vstcounts, intgroup=c("Status", "CellType"))
-```
 
 # Differential expression analysis with DESeq2
 
@@ -174,7 +164,7 @@ using the `results` function of DESeq2.
 
 ```{r resultsTable}
 res <- results(ddsObj, alpha=0.05)
-head(res)
+res
 ```
 
 ### Independent filtering
@@ -215,7 +205,7 @@ resultsNames(ddsObj)
 Let's just rename `res` so that we know which contrast results it contains.
 
 ```{r}
-resLvV <- res
+resLvV_status <- res
 rm(res)
 ```
 
@@ -224,83 +214,199 @@ of the design matrix column that encodes it.
 Let's retrieve the results for pregant versus virgin
 
 ```{r resultPvV}
-resPvV <- results(ddsObj, 
+resPvV_status <- results(ddsObj, 
                   name="Status_pregnant_vs_virgin", 
                   alpha = 0.05)
-resPvV
+resPvV_status
 ```
 
 Let's get the top 100 genes by adjusted p-value
 
 ```{r topGenesPvV, message = F, results="hide"}
-topGenesPvV <- as.data.frame(resPvV) %>%
+topGenesPvV <- as.data.frame(resPvV_status) %>%
     rownames_to_column("GeneID") %>% 
     arrange(padj) %>% 
     head(100)
 topGenesPvV
 ```
 
-```{r topGenesPvVprint, echo=FALSE}
-head(topGenesPvV)
+### Exercise 1
+
+> So far we have fitted a simple model considering just "Status", but in reality 
+> we want to model the effects of both "Status" and "Cell Type".
+> 
+> Let's start with the model with only main effects - an additive model with no 
+> interaction. The main assumption here is that the effect of the status on gene 
+> expression is the same in both types of cells.
+> 
+> First we will recapitulate the above steps to generate a new DESeq2 object with
+> the additive model. Then we will extract the results table for the contrast
+> for "lactate v virgin".
+> 
+> 1. Load the raw data.   
+>    Remember that we would like R to use 'Virgin' in the intercept of the mode,
+>    so we need to transform the Status into a factor in the sample sheet and 
+>    set "Virgin" to be the first level.
+>   
+> ```{r}
+> load("Robjects/preprocessing.RData")
+> sampleinfo$Status <- factor(sampleinfo$Status, 
+>                             levels = c("virgin", "pregnant", "lactate"))
+> ```
+> 
+> 2. Create the model
+> 
+> ```{r eval=FALSE}
+> design <- as.formula(~ CellType + Status)
+> ```
+> 
+> 2. Then build the DESeq from the raw data, the sample meta data and the model
+> 
+> ```{r eval=FALSE}
+> ddsObj.raw <- DESeqDataSetFromMatrix(countData = countdata,
+>                                      colData = sampleinfo,
+>                                      design = design)
+> ```
+> 
+> 3. Run the DESeq2 analysis
+> 
+> ```{r eval=FALSE}
+> ddsObj <- DESeq(ddsObj.raw)
+> ```
+> 
+> 4. Extract the default contrast - Lacate v Virgin
+>
+> ```{r eval=FALSE}
+> resLvV <- results(ddsObj, alpha=0.05)
+> ```
+> 
+> #### **Challenge 1** {.challenge}
+>
+> a) Obtain results for luminal vs basal.  Call the new results object `resLvB`.
+> b) How many significantly upregulated genes are there?
+>
+> #### **Challenge 2 - Contrasts** {.challenge} 
+>
+> Suppose we want to find genes that are  differentially expressed between 
+> **pregnant** and **lactate**. We don't have a parameter that explicitly will 
+> allow us to test that hypothesis. We need to provide a contrast.
+>   
+> Look at the help page for `results` (`?results`) and read about the `contrast`
+> argument (also look at Example 1 at the bottom of the help page)
+> 
+> Use the `contrast` argument to extract the results table for "pregnant v
+> lactate".
+
+```{r echo=FALSE, include=FALSE}
+design <- as.formula(~ CellType + Status)
+ddsObj.raw <- DESeqDataSetFromMatrix(countData = countdata, 
+                                     colData = sampleinfo,
+                                     design = design)
+ddsObj <- DESeq(ddsObj.raw)
+resLvV <- results(ddsObj, alpha=0.05)
 ```
 
+# Should be using the interaction model?
 
-> #### Challenge 1 {.challenge}
-> Obtain results for luminal vs basal and find the top 200 genes.
-> Call the new results object `resBvL`.
+So far we have modelled gene expression as a function of status and cell type 
+with an additive model. It is possible that the two factors interact such that
+differences in gene expression between different cell types are not the same
+across all three mouse statuses:
 
-```{r solutionChallenge1}
+![](../images/AdditiveAndInteractionModels.png)
+[*pdf version*](../images/AdditiveAndInteractionModels.pdf)
+
+Let's plot a PCA from `vst` transformed data. 
+Can you anticipate if the interaction term will be important?
+
+```{r pcaPlot, fig.width=5, fig.height=5}
+vstcounts <- vst(ddsObj.raw, blind=TRUE)
+plotPCA(vstcounts, intgroup=c("Status", "CellType"))
 ```
 
-## Contrasts
+Maybe, but we can't be sure so we need a way to compare the two models.
 
-Suppose we want to find differentially expressed genes between **pregnant** and 
-**lactate**. We don't have a parameter that explicitly will allow us to test 
-that hypothesis. We need to provide a contrast.
+## Comparing two design models
 
-```{r makeContrast}
-resultsNames(ddsObj)
-
-resPvL <- results(ddsObj,
-                  contrast=c("Status", "pregnant", "lactate"), 
-                  alpha = 0.05)
-resPvL
-```
-
-# Comparing two design models
+Let's take a simple example to start with.
 
 Suppose we thought that maybe `status` were irrelevant and really the only 
-differences might be between cell types. We could fit a simpler model, this 
+differences might be between cell types. We could fit a simpler model and this 
 would give us more degrees of freedom and therefore more power, but how
-would we know if it was a better model of not? We can compare the two models
-using the "likelihood ratio test" (LRT).
+would we know if it was a better model of not? 
+
+We can compare two models using the "likelihood ratio test" (LRT). 
+
+To do so we provide the LRT with a simpler model (one with less parameters) than
+the one currently be used. 
+
+Currently `ddsObj` is using the model `~CellType + Status`. Here we want to
+compare to a model without the `Status` parameter: `~CellType`
 
 ```{r compareModels}
-designC <- as.formula(~ CellType )
+# create the simpler model
+design.reduced <- as.formula(~ CellType )
 
-# Compare the designs
-ddsObjC <- DESeq(ddsObj, test="LRT", reduced=designC)
+# Compare the two designs
+ddsObjC <- DESeq(ddsObj, test="LRT", reduced=design.reduced)
 resCvCS <- results(ddsObjC)
 resCvCS
 ```
+
+The second line of the results output shows us the test we are doing:
+
+  `LRT p-value: '~ CellType + Status' vs '~ CellType'`
 
 The null hypothesis is that there is no significant difference between the two
 models, i.e. the simpler model is sufficient to explain the variation in gene
 expression between the samples. If the the adjusted p-value for a gene passes
 a significance threshold (e.g. padj < 0.05) then we should consider using the 
-more complex model for this gene. In practice we would usually choose one model
+more complex model for this gene. 
+
+```{r}
+sum(resCvCS$padj < 0.05, na.rm=TRUE)
+```
+
+We can see that for `r sum(resCvCS$padj < 0.05, na.rm=TRUE)` genes the more 
+complex model does fit the data better. This would suggest that we should be
+including both terms in the linear model.
+
+Although we have a result for each gene, in practice we should choose one model 
 or the other and apply it to all genes.
 
-> ### Challenge 2 {.challenge}
+### Exercise 2
+>
 > When we looked at the PCA it did seem that an interaction model might be
 > warranted. Let's test that.  
+>
+> #### Challenge {.challenge}
 >  
-> 1. Fit a model with interaction.  
-> 2. Use the LRT to compare the two models.  
-> 3. Is the number of replicates good enough to include the interaction?    
-> 4. Is the interaction needed in the model?  
+> 1. Create a new DESeq2 object using a model with an interaction between 
+>    CellType and Status. The model formula should be 
+>    `~CellType + Status + CellType:Status`, where `CellType:Status` is the 
+>     parameter for the interaction beteween CellType and> Status.
+>
+> Note that `*` can be used as shortcut to add the interaction term,
+> e.g. `~CellType * Status`, however, writing out in long form is clearer here.
+>
+> 2. Use the LRT to compare this to the simpler additive model 
+>    (`~CellType + Status`)
+> 3. For how many genes is interaction model a better fit?  
+> 4. Do you think the experimental design is good enough to include the 
+>    interaction? If not, why?    
 
-```{r solutionChallenge2}
+```{r eval=FALSE, echo=FALSE, include=FALSE}
+design <- as.formula(~ CellType * Status)
+ddsObj2.raw <- DESeqDataSetFromMatrix(countData = countdata, 
+                                     colData = sampleinfo,
+                                     design = design)
+# create the simpler model
+design.reduced <- as.formula(~ CellType + Status)
+
+# Compare the two designs
+ddsObjC2 <- DESeq(ddsObj2.raw, test="LRT", reduced=design.reduced)
+resCSvCxS <- results(ddsObjC2)
+table(resCSvCxS$padj < 0.05)
 ```
 
 ## Finally save the results in a new RData object

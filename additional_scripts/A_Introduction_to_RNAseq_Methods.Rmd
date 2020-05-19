@@ -1,7 +1,7 @@
 ---
 title: "Introduction to RNAseq Methods"
-author: "Ashley Sawle"
-date: "March 2019"
+author: "Sankari Nagarajan"
+date: "May 2020"
 output:
   ioslides_presentation:
     css: stylesheet.css
@@ -114,6 +114,7 @@ output:
 <p style="font-size: 14px">Image adapted from: Wang, Z., et al. (2009), Nature Reviews Genetics, 10, 57–63.</p>
 </div>
 
+<!---
 ## Designing the right experiment
 
 <img src="images/Experimental_Design-C_Ambrosino.jpg" class="centerimg" style="width: 90%">
@@ -122,6 +123,9 @@ output:
 <p style="font-size: 14px">Comic by Christine Ambrosino http://www.hawaii.edu/fishlab/Nearside.htm</p>
 </div>
 
+---> 
+
+<!---
 ## Designing the right experiment
 
 ### Key aspects of experimental design:
@@ -141,6 +145,7 @@ output:
 * Be amenable to statisical analysis
 
 * Be reproducible
+-->
 
 ## Designing the right experiment
 

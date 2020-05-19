@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Stephane Ballereau, Dominique-Laurent Couturier, Abbi Edwards, Guillermo Parada Gonzalez, Ashley Sawle" />
 
 
 <title>RNA-seq analysis in R</title>
@@ -146,6 +144,7 @@ summary {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -179,7 +178,6 @@ summary {
 
 <h1 class="title toc-ignore">RNA-seq analysis in R</h1>
 <h3 class="subtitle">Read alignment with HISAT2 - exercise solutions</h3>
-<h4 class="author">Stephane Ballereau, Dominique-Laurent Couturier, Abbi Edwards, Guillermo Parada Gonzalez, Ashley Sawle</h4>
 
 </div>
 
@@ -190,9 +188,13 @@ summary {
 <h3>Exercise 1</h3>
 <blockquote>
 <ol style="list-style-type: decimal">
-<li>Go to <code>Course_Materials/</code> directory using the command <code>cd</code> (change directory).</li>
+<li>Check your current working directory and if necessary navigate to the <code>Course_Materials/</code> directory using the command <code>cd</code> (change directory).</li>
 </ol>
-<p><code>cd ~/Course_Materials</code> 2. Use <code>ls</code> to list the contents of the directory.</p>
+<p><code>pwd</code> - to check <strong>p</strong>resent <strong>w</strong>working <strong>d</strong>irectory</p>
+<p><code>cd ~/Course_Materials</code> - if necessary</p>
+<ol start="2" style="list-style-type: decimal">
+<li>Use <code>ls</code> to list the contents of the directory.</li>
+</ol>
 <p><code>ls</code></p>
 <ol start="3" style="list-style-type: decimal">
 <li>Use <code>ls references</code> to list the contents of the <code>references</code> directory.</li>
@@ -209,7 +211,7 @@ summary {
 <ol style="list-style-type: upper-alpha">
 <li>Why do we use <code>-p 7</code>? Take a look at <code>hisat2-build</code> help.</li>
 </ol>
-<p>The <code>-p</code> flag is used to instruct hisat2 about how many threads (processors) it should use when running an operation. Using multiple processors in parallel speeds up the analysis. In our case, the machines we are using have 8 processors and so we tell hisat2 to use 7 of these which leaves one free.</p>
+<p><code>hisat2-build --help</code> The <code>-p</code> flag is used to instruct hisat2 about how many threads (processors) it should use when running an operation. Using multiple processors in parallel speeds up the analysis. In our case, the machines we are using have 8 processors and so we tell hisat2 to use 7 of these which leaves one free.</p>
 <ol start="2" style="list-style-type: upper-alpha">
 <li>How many files are created?</li>
 </ol>
@@ -223,24 +225,6 @@ summary {
 <h3>Exercise 2</h3>
 <blockquote>
 <ol style="list-style-type: decimal">
-<li>Identify the smallest file in the fastq directory. hint: use <code>ls -lSh</code> to list the files and sort by size</li>
-</ol>
-<p><code>ls -lSh fastq</code></p>
-<pre><code>total 27G
--rw-rw-r-- 1 participant participant 2.4G Aug 28 17:03 MCL1.DI.fastq.gz
--rw-rw-r-- 1 participant participant 2.3G Aug 28 17:04 MCL1.LB.fastq.gz
--rw-rw-r-- 1 participant participant 2.3G Aug 28 17:02 MCL1.DG.fastq.gz
--rw-rw-r-- 1 participant participant 2.3G Aug 28 17:00 MCL1.LC.fastq.gz
--rw-rw-r-- 1 participant participant 2.3G Aug 28 17:02 MCL1.LE.fastq.gz
--rw-rw-r-- 1 participant participant 2.3G Aug 28 17:03 MCL1.LF.fastq.gz
--rw-rw-r-- 1 participant participant 2.3G Aug 28 17:01 MCL1.DJ.fastq.gz
--rw-rw-r-- 1 participant participant 2.2G Aug 28 17:01 MCL1.LD.fastq.gz
--rw-rw-r-- 1 participant participant 2.2G Aug 28 17:04 MCL1.DH.fastq.gz
--rw-rw-r-- 1 participant participant 2.2G Aug 28 17:00 MCL1.LA.fastq.gz
--rw-rw-r-- 1 participant participant 2.1G Aug 28 17:03 MCL1.DK.fastq.gz
--rw-rw-r-- 1 participant participant 2.0G Aug 28 17:01 MCL1.DL.fastq.gz</code></pre>
-<p>The 5th column shows the file size in bytes. MCL1.DL.fastq.gz is the smallest fastq file.</p>
-<ol start="2" style="list-style-type: decimal">
 <li>Create a directory called <code>bam</code> (BAM will be our final aligned file format, but we have one more step after alignment to get there).</li>
 </ol>
 <p><code>mkdir bam</code></p>
@@ -251,12 +235,14 @@ summary {
 <li>Fastq file - <code>fastq/MCL1.DL.fastq.gz</code></li>
 <li>Output file - <code>bam/SMCL1.DL.sam</code></li>
 <li>Set the number of threads (number of processors to use) to 7 - check the help page to find the appropriate flag</li>
+<li>Add the <code>-t</code> flag so that HISAT2 will print a time log to the console</li>
 </ul></li>
 </ol>
 <pre><code>hisat2 -x references/hisat_index/mmu.GRCm38 \
        -U fastq/MCL1.DL.fastq.gz \
        -S bam/MCL1.DL.sam \
-       -p 7</code></pre>
+       -p 7 \
+       -t</code></pre>
 </blockquote>
 </div>
 </div>
@@ -268,11 +254,11 @@ summary {
 <ol style="list-style-type: decimal">
 <li>Transform your aligned SAM file in to a BAM file.</li>
 </ol>
-<p><code>samtools view -b bam/MCL1.DL.sam &gt; bam/MCL1.DL.bam</code></p>
+<p><code>samtools view -b -@ 7 bam/MCL1.DL.sam &gt; bam/MCL1.DL.bam</code></p>
 <ol start="2" style="list-style-type: decimal">
 <li>Sort the BAM file</li>
 </ol>
-<p><code>samtools sort bam/MCL1.DL.bam &gt; bam/MCL1.DL.sorted.bam</code></p>
+<p><code>samtools sort -@ 7 bam/MCL1.DL.bam &gt; bam/MCL1.DL.sorted.bam</code></p>
 <ol start="3" style="list-style-type: decimal">
 <li>Index the sorted BAM file</li>
 </ol>

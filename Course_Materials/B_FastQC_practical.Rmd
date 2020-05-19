@@ -1,7 +1,7 @@
 ---
 title: "RNA-seq analysis in R"
-subtitle: "QC of raw reads with FastQC"
-author: "Stephane Ballereau, Dominique-Laurent Couturier, Abbi Edwards, Guillermo Parada Gonzalez, Ashley Sawle"
+author: "Stephane Ballereau, Dominique-Laurent Couturier, Abbi Edwards, Ashley Sawle"
+subtitle: QC of raw reads with FastQC
 ---
 
 In our intial QC of the raw fastq file we will be interested in gathering
@@ -50,7 +50,7 @@ report written into a directory called **QC**.
 
 Note that the output directory must already exist, FastQC will not create it.
 
-### Exercise 1
+### Exercise
 
 > 1. 
 >       a) Check the location of the current directory using the command `pwd`  

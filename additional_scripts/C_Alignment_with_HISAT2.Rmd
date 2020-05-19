@@ -70,17 +70,6 @@ Two main parts:
 
 <img src="images/SAM_alignment_1c.png" class="centerimg" style="width: 100%; margin-top: 10px;">
 
-## HISAT2
-
-Fast and good performance in published benchmark tests.
-
-First need to generate an index for the reference genome with the `hisat2-build` 
-command
-
-Indexing is where all the work takes place and so is computationally intensive
-
-Then we can align reads to the genome with `hisat2`
-
 ## SAM format - alignment
 
 
@@ -128,3 +117,25 @@ Then we can align reads to the genome with `hisat2`
 </div>
 </div>
 </div>
+
+## HISAT2
+
+Fast and good performance in published benchmark tests.
+
+First need to generate an index for the reference genome with the `hisat2-build` 
+command
+
+Indexing is where all the work takes place and so is computationally intensive
+
+Then we can align reads to the genome with `hisat2`
+
+## Practical
+
+1. Create an index to the genome with `HISAT2`
+
+2. Align reads to the genome with `HISAT2` --> SAM file
+
+3. Convert the SAM file to BAM with `samtools`
+
+4. Index the BAM file with `samtools`
+

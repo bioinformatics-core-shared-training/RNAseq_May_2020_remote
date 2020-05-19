@@ -1,18 +1,21 @@
 ---
 title: "RNA-seq analysis in R"
 subtitle: "Read alignment with HISAT2 - exercise solutions"
-author: "Stephane Ballereau, Dominique-Laurent Couturier, Abbi Edwards, Guillermo Parada Gonzalez, Ashley Sawle"
-output: html_notebook
+output: html_document
 ---
 
 ## 1 Indexing the genome for Hisat2
 
 ### Exercise 1
 
-> 1. Go to `Course_Materials/` directory using the command `cd` (change
+> 1. Check your current working directory and if necessary navigate to 
+>    the `Course_Materials/` directory using the command `cd` (change
 >    directory).
+>
+> `pwd` - to check **p**resent **w**working **d**irectory
 > 
-> `cd ~/Course_Materials` 
+> `cd ~/Course_Materials`  - if necessary
+>
 > 2. Use `ls` to list the contents of the directory.  
 > 
 > `ls`
@@ -32,10 +35,11 @@ output: html_notebook
 >    
 > A) Why do we use `-p 7`? Take a look at `hisat2-build` help.
 >
-The `-p` flag is used to instruct hisat2 about how many threads (processors) it
-should use when running an operation. Using multiple processors in parallel
-speeds up the analysis.  In our case, the machines we are using have 8
-processors and so we tell hisat2 to use 7 of these which leaves one free.
+> `hisat2-build --help`
+> The `-p` flag is used to instruct hisat2 about how many threads (processors) 
+> it should use when running an operation. Using multiple processors in parallel
+> speeds up the analysis.  In our case, the machines we are using have 8
+> processors and so we tell hisat2 to use 7 of these which leaves one free.
 >
 > B) How many files are created? 
 >
@@ -46,29 +50,7 @@ So in this case we have `mmu.GRCm38.1.ht2` to `mmu.GRCm38.8.ht2`.
 
 ### Exercise 2 
 
-> 1. Identify the smallest file in the fastq directory. hint: use `ls -lSh` to
->    list the files and sort by size
->
-> `ls -lSh fastq`
-> ```
-> total 27G
-> -rw-rw-r-- 1 participant participant 2.4G Aug 28 17:03 MCL1.DI.fastq.gz
-> -rw-rw-r-- 1 participant participant 2.3G Aug 28 17:04 MCL1.LB.fastq.gz
-> -rw-rw-r-- 1 participant participant 2.3G Aug 28 17:02 MCL1.DG.fastq.gz
-> -rw-rw-r-- 1 participant participant 2.3G Aug 28 17:00 MCL1.LC.fastq.gz
-> -rw-rw-r-- 1 participant participant 2.3G Aug 28 17:02 MCL1.LE.fastq.gz
-> -rw-rw-r-- 1 participant participant 2.3G Aug 28 17:03 MCL1.LF.fastq.gz
-> -rw-rw-r-- 1 participant participant 2.3G Aug 28 17:01 MCL1.DJ.fastq.gz
-> -rw-rw-r-- 1 participant participant 2.2G Aug 28 17:01 MCL1.LD.fastq.gz
-> -rw-rw-r-- 1 participant participant 2.2G Aug 28 17:04 MCL1.DH.fastq.gz
-> -rw-rw-r-- 1 participant participant 2.2G Aug 28 17:00 MCL1.LA.fastq.gz
-> -rw-rw-r-- 1 participant participant 2.1G Aug 28 17:03 MCL1.DK.fastq.gz
-> -rw-rw-r-- 1 participant participant 2.0G Aug 28 17:01 MCL1.DL.fastq.gz
-> ```
-> The 5th column shows the file size in bytes. MCL1.DL.fastq.gz is the smallest
-> fastq file.
->
-> 2. Create a directory called `bam` (BAM will be our final aligned file
+> 1. Create a directory called `bam` (BAM will be our final aligned file
 >    format, but we have one more step after alignment to get there).
 >
 > `mkdir bam`
@@ -79,12 +61,14 @@ So in this case we have `mmu.GRCm38.1.ht2` to `mmu.GRCm38.8.ht2`.
 >       * Output file - `bam/SMCL1.DL.sam`
 >       * Set the number of threads (number of processors to use) to 7 - check
 >         the help page to find the appropriate flag
+>       * Add the `-t` flag so that HISAT2 will print a time log to the console
 >
 > ```
 > hisat2 -x references/hisat_index/mmu.GRCm38 \
 >        -U fastq/MCL1.DL.fastq.gz \
 >        -S bam/MCL1.DL.sam \
->        -p 7
+>        -p 7 \
+>        -t
 > ```
 
 ## 3 Convert the SAM output to BAM 
@@ -93,11 +77,11 @@ So in this case we have `mmu.GRCm38.1.ht2` to `mmu.GRCm38.8.ht2`.
 
 > 1. Transform your aligned SAM file in to a BAM file.
 >
-> `samtools view -b bam/MCL1.DL.sam > bam/MCL1.DL.bam`
+> `samtools view -b -@ 7 bam/MCL1.DL.sam > bam/MCL1.DL.bam`
 >
 > 2. Sort the BAM file
 >
-> `samtools sort bam/MCL1.DL.bam > bam/MCL1.DL.sorted.bam`
+> `samtools sort -@ 7 bam/MCL1.DL.bam > bam/MCL1.DL.sorted.bam`
 >
 > 3. Index the sorted BAM file
 >

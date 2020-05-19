@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Stephane Ballereau, Dominique-Laurent Couturier, Abbi Edwards, Guillermo Parada Gonzalez, Ashley Sawle" />
 
 
 <title>RNA-seq analysis in R</title>
@@ -146,6 +144,7 @@ summary {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -179,19 +178,18 @@ summary {
 
 <h1 class="title toc-ignore">RNA-seq analysis in R</h1>
 <h3 class="subtitle">Read alignment with HISAT2</h3>
-<h4 class="author">Stephane Ballereau, Dominique-Laurent Couturier, Abbi Edwards, Guillermo Parada Gonzalez, Ashley Sawle</h4>
 
 </div>
 
 
 <div id="mapping-reads-to-a-reference-genome" class="section level1">
 <h1>Mapping reads to a reference genome</h1>
-<p>Once we are happy with the data quality, we can start to analyse the data. Usually, the first step into the analysis requires mapping the RNA-seq reads to the genome. There are numerous tools we could use to perform short read alignment and the choice should be made carefully according to the analysis goals and requirements. For RNAseq gene expression analysis Hisat2 is a very fast tool that has been shown to have a good performance on published benchmarks.</p>
+<p>Once we are happy with the data quality, we can start to analyse the data. Usually, the first step into the analysis requires mapping the RNA-seq reads to the genome. There are numerous tools we could use to perform short read alignment and the choice should be made carefully according to the analysis goals and requirements. For RNAseq gene expression analysis HISAT2 is a very fast tool that has been shown to have a good performance on published benchmarks.</p>
 <p>We are going to be aligning the reads from the fastq against the GRCm38 reference genome from Ensembl. This can be obtained here: <a href="ftp://ftp.ensembl.org/pub/release-97/fasta/mus_musculus/dna/Mus_musculus.GRCm38.dna.primary_assembly.fa.gz" class="uri">ftp://ftp.ensembl.org/pub/release-97/fasta/mus_musculus/dna/Mus_musculus.GRCm38.dna.primary_assembly.fa.gz</a></p>
 <div id="indexing-the-genome-for-hisat2" class="section level2">
 <h2>1 Indexing the genome for Hisat2</h2>
-<p>Typically our genome reference will be in <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&amp;PAGE_TYPE=BlastDocs&amp;DOC_TYPE=BlastHelp">FASTA format</a>. Before we can start mapping RNA-seq reads to the genome, we need to create an index to the genome. This index allows HISAT2 to quickly search the genome for possible mapping positions for each read. It is analagous to an index in a book: if you what to find out where in the book a particular word occurs it is quicker to look at the index than to search through the book page by page, then you can jump straight to the correct page to find the exact line and position of the word.</p>
-<p>The command to index the genome for hisat2 is <code>hisat2-build</code>.</p>
+<p>Typically our genome reference will be in <a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&amp;PAGE_TYPE=BlastDocs&amp;DOC_TYPE=BlastHelp">FASTA format</a>. Before we can start mapping RNA-seq reads to the genome, we need to create an index to the genome. This index allows HISAT2 to quickly search the genome for possible mapping positions for each read. It is analogous to an index in a book: if you what to find out where in the book a particular word occurs it is quicker to look at the index than to search through the book page by page, then you can jump straight to the correct page to find the exact line and position of the word.</p>
+<p>The command to index the genome for HISAT2 is <code>hisat2-build</code>.</p>
 <p>Access the help page to find the basic usage an other options:</p>
 <p><code>hisat2-build --help</code></p>
 <p>The <strong>Usage</strong> is:</p>
@@ -203,16 +201,17 @@ summary {
 <h3>Exercise 1</h3>
 <blockquote>
 <ol style="list-style-type: decimal">
-<li>Go to <code>Course_Materials/</code> directory using the command <code>cd</code> (change directory).</li>
+<li>Check your current working directory and if necessary navigate to the <code>Course_Materials/</code> directory using the command <code>cd</code> (change directory).</li>
 <li>Use <code>ls</code> to list the contents of the directory.<br />
 There should be a <code>references</code> directory. This will contain various reference materials that we will need throughout analysis, such as the mouse genome and gene annotations.</li>
 <li>Use <code>ls references</code> to list the contents of the <code>references</code> directory.<br />
 There should be file called <code>Mus_musculus.GRCm38.chr1.fa</code>. This is the reference genome sequence for chromosome 1 in FASTA format. We are just going to work with chromosome 1 for this exercise as indexing the entire genome would take too long. You’ll also notice a directory called <code>hisat2_index</code>, this is the index for the entire genome, which has already been generated. We’ll be using this later.</li>
-<li>Make a directory called <code>hisat2_index_chr1</code> inside the <code>references</code> directory. This is where we will create our chr1 index.</li>
-<li>To create the hisat2 index run the following command:</li>
+<li>Make a directory (<code>mkdir</code>) inside the <code>references</code> directory called <code>hisat2_index_chr1</code>:</li>
 </ol>
+<p><code>mkdir references/hisat2_index_chr1</code></p>
+<p>This is where we will create our chr1 index. 5. To create the hisat2 index run the following command:</p>
 <p><code>hisat2-build -p 7 references/Mus_musculus.GRCm38.chr1.fa references/hisat2_index_chr1/grcm38</code></p>
-<p>Here we are:</p>
+<p>With this command we are:</p>
 <ul>
 <li>providing the fasta file <em>references/Mus_musculus.GRCm38.chr1.fa</em> for the <code>&lt;reference_in&gt;</code><br />
 </li>
@@ -226,7 +225,7 @@ There should be file called <code>Mus_musculus.GRCm38.chr1.fa</code>. This is th
 </div>
 </div>
 <div id="align-with-hisat2" class="section level2">
-<h2>2 Align with Hisat2</h2>
+<h2>2 Align with HISAT2</h2>
 <p>To map the reads to the genome we need to run <code>hisat2</code>.</p>
 <p>We will need to provide the command with three pieces of information:</p>
 <ul>
@@ -236,30 +235,50 @@ There should be file called <code>Mus_musculus.GRCm38.chr1.fa</code>. This is th
 </li>
 <li>A name for the output file</li>
 </ul>
-<p>We should also instruct hisat2 how many threads (processors) it should use (these machines have 8 processors, so we should let hisat2 use 7 of them, keeping 1 free).</p>
-<p>Take a quick look to hisat2’s description</p>
+<p>We should also instruct HISAT2 how many threads (processors) it should use (these machines have 8 processors, so we should let HISAT2 use 7 of them, keeping 1 free).</p>
+<p>Take a quick look to HISAT2’s description</p>
 <p><code>hisat2 --help</code></p>
 <p>The usage is:</p>
 <pre><code>Usage:
-  hisat2 [options]* -x &lt;ht2-idx&gt; {-1 &lt;m1&gt; -2 &lt;m2&gt; | -U &lt;r&gt;} [-S &lt;sam&gt;]
+  hisat2 [options]* -x &lt;ht2-idx&gt; {-1 &lt;m1&gt; -2 &lt;m2&gt; | -U &lt;r&gt; | --sra-acc &lt;SRA accession number&gt;} [-S &lt;sam&gt;]
 
-      &lt;ht2-idx&gt;  Index filename prefix (minus trailing .X.ht2).
-      &lt;m1&gt;       Files with #1 mates, paired with files in &lt;m2&gt;.
-                 Could be gzip'ed (extension: .gz) or bzip2'ed (extension: .bz2).
-      &lt;m2&gt;       Files with #2 mates, paired with files in &lt;m1&gt;.
-                 Could be gzip'ed (extension: .gz) or bzip2'ed (extension: .bz2).
-      &lt;r&gt;        Files with unpaired reads.
-                 Could be gzip'ed (extension: .gz) or bzip2'ed (extension: .bz2).
-      &lt;sam&gt;      File for SAM output (default: stdout)
+  &lt;ht2-idx&gt;  Index filename prefix (minus trailing .X.ht2).
+  &lt;m1&gt;       Files with #1 mates, paired with files in &lt;m2&gt;.
+             Could be gzip'ed (extension: .gz) or bzip2'ed (extension: .bz2).
+  &lt;m2&gt;       Files with #2 mates, paired with files in &lt;m1&gt;.
+             Could be gzip'ed (extension: .gz) or bzip2'ed (extension: .bz2).
+  &lt;r&gt;        Files with unpaired reads.
+             Could be gzip'ed (extension: .gz) or bzip2'ed (extension: .bz2).
+  &lt;SRA accession number&gt;        Comma-separated list of SRA accession numbers, e.g. --sra-acc SRR353653,SRR353654.
+  &lt;sam&gt;      File for SAM output (default: stdout)
 
-      &lt;m1&gt;, &lt;m2&gt;, &lt;r&gt; can be comma-separated lists (no whitespace) and can be
-      specified many times.  E.g. '-U file1.fq,file2.fq -U file3.fq'.</code></pre>
+  &lt;m1&gt;, &lt;m2&gt;, &lt;r&gt; can be comma-separated lists (no whitespace) and can be
+  specified many times.  E.g. '-U file1.fq,file2.fq -U file3.fq'.
+</code></pre>
+<p><code>[options]*</code> refers the many optional parameters listed in the following <code>Options</code> section of the help. We do not need to worry about these for now.</p>
+<p>After the options there are three arguments.</p>
+<p>The first required argument is the name of the hisat file index, which should be preceded by the <code>-x</code> flag:</p>
+<pre><code>`-x &lt;ht2-idx&gt;`</code></pre>
+<p>The usage tells us that the filename prefix should be provided, that is the filename without the <code>.X.ht2</code> suffix:</p>
+<pre><code>`&lt;ht2-idx&gt;  Index filename prefix (minus trailing .X.ht2).`</code></pre>
+<p>The chromosome 1 index that we created in Exercise 1 had 8 files:</p>
+<pre><code>references/hisat2_index_chr1/grcm38.1.ht2
+references/hisat2_index_chr1/grcm38.2.ht2
+...
+references/hisat2_index_chr1/grcm38.8.ht2</code></pre>
+<p>So the index filename prefix would be <code>references/hisat2_index_chr1/grcm38</code> .</p>
+<p>The next argumnet is the raw read data to be aligned. The curly brackets (<code>{...|...}</code>) indicate that we must provide this is one of three ways:</p>
+<ul>
+<li>with the flags <code>-1</code> and <code>-2</code> to give two fastq files when we have paired end reads</li>
+<li>with the <code>-U</code> flag to just give one fastq if our reads are single end (as is the case today)</li>
+<li>with the <code>-r</code> flag to provide an SRA accession number to download and process data directly from the NCBI’s Sequence Read Archive (SRA).</li>
+</ul>
+<p>The third argument is in square brackets (<code>[...]</code>), which indicate that argument <code>-S</code> is entirely optional. This argument is used to provide a file to write the results to. If we do not provide this the default is to write to <code>stdout</code>, which refers to the “standard output” and means the results would just be printed on the screen.</p>
 <p>So we need to provide:</p>
 <ul>
-<li>the path to the index after the <code>-x</code> flag<br />
+<li>the prefix of the index file after the <code>-x</code> flag<br />
 </li>
-<li>the path to out fastq file after the <code>-U</code> flag (if we had paired end data we would have 2 fastq files and would use the -1 and -2 flags)<br />
-</li>
+<li>the path to out fastq file after the <code>-U</code> flag</li>
 <li>the name for the output SAM file after the <code>-S</code> flag. The output file format is SAM, so the output filename should end <code>.sam</code>.</li>
 </ul>
 <p>There many additional options that allow us to tweak the parameters used in the alignment. As a general rule, unless you really know what you are doing you should stick to the defaults.</p>
@@ -267,28 +286,23 @@ There should be file called <code>Mus_musculus.GRCm38.chr1.fa</code>. This is th
 <h3>Exercise 2</h3>
 <blockquote>
 <ol style="list-style-type: decimal">
-<li>Identify the smallest file in the fastq directory. hint: use <code>ls -lSh</code> to list the files and sort by size:
-<ul>
-<li><code>-l</code> - use long listing format - provides additional columns about permissions, file size and last modification time</li>
-<li><code>-S</code> - Sort by file size</li>
-<li><code>-h</code> - print the in a human readable format</li>
-</ul></li>
-<li>Create a directory called <code>bam</code> (BAM will be our final aligned file format, but we have one more step after alignment to get there).</li>
-<li>Use hisat2 to align the fastq file. Use the following parameters
+<li>Make a directory called <code>bam</code> (BAM will be the final format of our aligned data, but we have one more step after alignment to get there).</li>
+<li>Use HISAT2 to align the fastq file. Use the following parameters
 <ul>
 <li>Index (the full genome this time) - <code>references/hisat2_index/mmu.GRCm38</code></li>
-<li>Fastq file - <code>fastq/MCL1.DL.fastq.gz</code></li>
+<li>Fastq file with unpaired reads - <code>fastq/MCL1.DL.fastq.gz</code></li>
 <li>Output file - <code>bam/MCL1.DL.sam</code></li>
 <li>Set the number of threads (number of processors to use) to 7 - check the help page to find the appropriate flag</li>
+<li>Add the <code>-t</code> flag so that HISAT2 will print a time log to the console</li>
 </ul></li>
 </ol>
-<p><strong>Note</strong>: when the <code>hisat2</code> command runs successfully, there will be no indication that it is doing anything except that the command prompt disappears and the terminal will appear <em>frozen</em> (this is a helpful feature of many unix/linux tools). The alignment take 10-15 minutes - go get a coffee or help the person next to you.</p>
+<p><strong>Note</strong>: The alignment may take 5-10 minutes - go get a nice cup of tea.</p>
 </blockquote>
 </div>
 </div>
 <div id="convert-the-sam-output-to-bam" class="section level2">
 <h2>3 Convert the SAM output to BAM</h2>
-<p>The output of hisat2 is a SAM file. This is the a standardized format for presenting aligned sequence data. You can read details of the specifications here:</p>
+<p>The output of HISAT2 is a SAM file. This is the standardized format for presenting aligned sequence data. You can read details of the specifications here:</p>
 <p><a href="https://samtools.github.io/hts-specs/SAMv1.pdf" class="uri">https://samtools.github.io/hts-specs/SAMv1.pdf</a></p>
 <p>Unfortunately, this is a plain text file and they tend to be very large. BAM files are the binary (compressed) version of SAM files. They are much smaller and can be indexed making them quicker to access and process.</p>
 <div id="sam-to-bam-with-samtools" class="section level3">
@@ -321,10 +335,10 @@ There should be file called <code>Mus_musculus.GRCm38.chr1.fa</code>. This is th
 <li>Sort the BAM file to a create a bam files called <code>MCL1.DL.sorted.bam</code>. Again use the <code>-@ 7</code> options to use 7 cores.</li>
 <li>Index the sorted BAM file</li>
 <li>Now that you have a bam file have a look at the header of the file with the command:<br />
-<code>samtools view -H my_sample.sorted.bam</code><br />
-Replacing “<code>mysample.sorted.bam</code>” with name of your bam file.</li>
+<code>samtools view -H &lt;my_sample.sorted.bam&gt;</code><br />
+Replacing “<code>&lt;my_sample.sorted.bam&gt;</code>” with your bam file.</li>
 <li>View the first few aligned sequences with the command: <code>samtools view my_sample.sorted.bam | head</code><br />
-The <code>|</code> symbol is known as the “pipe”, it “pipes” the output of the first command into the next command. Take a look at the SAM format specifications <a href="https://samtools.github.io/hts-specs/SAMv1.pdf">here</a>. Jump to section 1.4 &quot; The alignment section: mandatory fields&quot; and see if you can begin to interpret the the first 11 fields of the alignment information in your bam file.</li>
+The <code>|</code> symbol is known as the “pipe”, it “pipes” the output of the first command into the next command. Take a look at the SAM format specifications <a href="https://samtools.github.io/hts-specs/SAMv1.pdf">here</a>. Jump to section 1.4 &quot; The alignment section: mandatory fields&quot; and see if you can begin to interpret the the first 11 fields of the alignment information in your bam file. Don’t forget the website <a href="https://broadinstitute.github.io/picard/explain-flags.html">Explain SAM flags</a> which helps with decoding the flag field of the alignment.</li>
 </ol>
 </blockquote>
 </div>
