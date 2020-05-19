@@ -84,24 +84,24 @@ Methods](html/A_Introduction_to_RNAseq_Methods.html) - Sankari Nagarajan
 10:15 - 11:15 Raw read file format and QC - Abbi Edwards  
     - [Introductory slides](html/B_FastQC.html)  
     - [Practical](html/B_FastQC_practical.html)  
-<!--     - [Practical solutions](html/B_FastQC_practical.Solutions.html)  -->
+    - [Practical solutions](html/B_FastQC_practical.Solutions.html)
 
 11:15 - 12:30 Short read alignment with HISAT2 - Ashley Sawle  
     - [Introductory slides](html/C_Alignment_with_HISAT2.html)  
     - [Practical](html/C_Alignment_with_HISAT2_practical.html)  
-<!--    - [Practical solutions](html/C_Alignment_with_HISAT2.Solutions.html)  -->
+    - [Practical solutions](html/C_Alignment_with_HISAT2.Solutions.html)
 
 12:30 - 13:30 Lunch
 
 13:30 - 15:00 QC of alignment - Ashley Sawle  
     - [Introductory slides](html/D_QC_of_aligned_reads.html)  
     - [Practical](html/D_QC_of_aligned_reads_practical.html)  
-<!--     - [Practical solutions](html/D_QC_of_aligned_reads.Solutions.html)  -->
+    - [Practical solutions](html/D_QC_of_aligned_reads.Solutions.html)
 
 15:00 - 16:30 Quantification with SubRead - Abbi Edwards  
     - [Introductory slides](html/E_Read_Counts_with_Subread.html)  
     - [Practical](html/E_Read_Counts_with_Subread.practical.html)  
-<!--     - [Practical solutions](html/E_Read_Counts_with_Subread.Solutions.html)  -->
+    - [Practical solutions](html/E_Read_Counts_with_Subread.Solutions.html)
 
 ### Day 2
 
