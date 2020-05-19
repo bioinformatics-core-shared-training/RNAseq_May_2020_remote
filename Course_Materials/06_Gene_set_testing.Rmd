@@ -16,10 +16,6 @@ editor_options:
 ---
 
 ```{r setup, include=TRUE, cache=FALSE}
-getwd()  
-knitr::opts_knit$set(root.dir = normalizePath(".."))
-knitr::opts_knit$get("root.dir")
-
 library(tidyverse)
 ```
 

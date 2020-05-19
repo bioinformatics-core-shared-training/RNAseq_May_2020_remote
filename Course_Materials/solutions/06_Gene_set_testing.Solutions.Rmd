@@ -50,7 +50,7 @@ you can do this combining the sign of the fold change and the pvalue.
 ranks <- -log10(gseaDat$pvalue) * sign(gseaDat$logFC)
 names(ranks) <- gseaDat$Entrez  
 
-load("Robjects/mouse_c2_v5.RData")
+load("../Robjects/mouse_c2_v5.RData")
 pathwaysC2 <- Mm.c2
 
 fgseaResC2 <- fgsea(pathwaysC2, ranks, minSize=15, maxSize = 500, nperm=1000)
@@ -102,8 +102,6 @@ goResultsUp %>%
 > use genes that are statistically significant at FDR < 0.01
 
 ```{r solution3}
-setwd("results")
-
 sigGenes <- shrinkLvV$FDR < 0.01 & !is.na(shrinkLvV$FDR)
 
 logFC <- annotLvV$logFC[sigGenes]

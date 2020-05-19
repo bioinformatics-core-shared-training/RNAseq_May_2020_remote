@@ -37,10 +37,6 @@ website](http://master.bioconductor.org/packages/release/workflows/vignettes/rna
 First, let's load all the packages we will need to analyse the data.
 
 ```{r setup, message = FALSE}
-getwd()  
-knitr::opts_knit$set(root.dir = normalizePath(".."))
-knitr::opts_knit$get("root.dir")
-
 library(DESeq2)
 library(tidyverse)
 ```
