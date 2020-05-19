@@ -5,8 +5,6 @@
 
 ![](images/CRUK_Cambridge_Major Centre logo.jpg)
 
-## THIS WEBSITE IS A WORK IN PROGRESS. MATERIALS MAY NOT BE COMPLETE AND LINKS MAY NOT WORK YET
-
 ## Instructors
 
 * Abbi Edwards - Bioinformatics Core, Cancer Research UK Cambridge Institute
