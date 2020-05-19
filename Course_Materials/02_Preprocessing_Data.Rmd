@@ -18,8 +18,8 @@ editor_options:
 # Introduction
 
 In this section we will begin the process of analysing the RNAseq in R. In the
-next section we will use DESeq2 for differential analysis. Before we
-do that we need to:
+next section we will use [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html)
+for differential analysis. Before we do that we need to:
 
 * import our counts into R
 * manipulate the imported data so that it is in the correct format for DESeq2
@@ -37,6 +37,10 @@ website](http://master.bioconductor.org/packages/release/workflows/vignettes/rna
 First, let's load all the packages we will need to analyse the data.
 
 ```{r setup, message = FALSE}
+getwd()  
+knitr::opts_knit$set(root.dir = normalizePath(".."))
+knitr::opts_knit$get("root.dir")
+
 library(DESeq2)
 library(tidyverse)
 ```
@@ -86,13 +90,13 @@ seqdata <- read_tsv("data/GSE60450_Lactation.featureCounts", comment="#")
 seqdata
 ```
 
-In the `seqdata` object each row represents a gene. The columns contains:
+In the `seqdata` object each row represents a gene. Columns are:
 
    1 *Geneid* - Ensembl ID  
  2-5 *Chr*, *Start*, *End*, *Strand* - Genomic locations of exons of the gene  
    6 *Length* - Transcript length of the gene  
-7-18 One column for each sample with the count of how many reads were assigned  
-to each gene by featureCounts.
+7-18 One column for each sample with the number of reads assigned to the gene
+by featureCounts.
 
 ### A quick intro to `dplyr`
 
@@ -106,7 +110,7 @@ We are introducing this because it makes many of the processes we will look at
 later **much simpler**. Importantly it also results in code that is much easier
 to read and understand.
 
-Let's have quick look at this by playing with our `sampleinfo` table.
+Let's have a quick look at this by playing with our `sampleinfo` table.
 
 Suppose we wanted a new sample table that:
 
@@ -124,7 +128,7 @@ newTable <- rename(newTable, Cell=CellType)
 ```
 
 There's no need to quote the column names as dplyr intelligently interprets
-the arguments it's passes as belonging to the data table columns.
+the arguments it's passed as belonging to the data table columns.
 
 Rather than repeatedly reassigning `newTable <- f(newTable)` as above, we can 
 use the "*pipe*" - `%>%`. This takes the output of one function and "*pipes*" it
@@ -169,9 +173,9 @@ order as the rows of `sampleinfo`. When we load these objects into DESeq2 for
 the analysis it will not guess which row of the `sampleinfo` belongs to which
 column of the counts matrix, it will assume the same order.
 
-We'll use to new `dplyr` commands:
+We'll use the new commands:
 
-* `columns_to_rownames` to set the rownames using a named column
+* `column_to_rownames` to set the rownames using a named column
 * `rename_all` which allows to rename all the columns using a string function
 
 ```{r createCountMatrix}
@@ -180,6 +184,10 @@ countdata <- seqdata %>%
     rename_all(str_remove, ".bam") %>% # remove the ".bam" from the column names
     select(sampleinfo$Sample) %>% # keep sample columns using sampleinfo$Sample
     as.matrix()
+
+# check manual for help
+# ?tibble::column_to_rownames 
+# ?dplyr::select
 
 head(countdata)
 ```
@@ -190,6 +198,8 @@ The `stringr` package has a lots of useful functions for manipulating strings
 
 
 # Filtering the genes
+
+<!-- prefiltering -->
 
 For many analysis methods it is advisable to filter out as many genes as 
 possible prior to starting the analysis in order to decrease the impact on false
@@ -209,6 +219,7 @@ greater than 5.
 ```{r filterGenes}
 dim(countdata)
 keep <- rowSums(countdata) > 5
+table(keep, useNA="always") # summary of test outcome 
 countdata <- countdata[keep,]
 dim(countdata)
 ```
@@ -244,6 +255,9 @@ value in order to prevent attempting `log2(0)` from creating errors.
 ```{r logTransform}
 # Get log2 counts
 logcounts <- log2(countdata + 1)
+
+# summary(logcounts[,1]) # summary for first column
+# summary(logcounts) # summary for each column
 ```
 
 We'll check the distribution of read counts using a boxplot and add some
@@ -273,13 +287,17 @@ that sample further.
 > 1. Use the `DESeq2` function `rlog` to transform the count data. This function
 > also normalises for library size.
 > 2. Plot the count distribution boxplots with this data  
->    How has this effected the count distributions?
+>    How has this affected the count distributions?
+
+```{r proProcObjChal1, echo=FALSE, eval=FALSE}
+# have object ready for challenge
+# need countdata, sampleinfo
+save(countdata, sampleinfo, file="Robjects/preprocessingChal1.RData")
+```
 
 ```{r solutionChallenge1}
 
-
 ```
-
 
 ## Principal Component Analysis
 
@@ -325,10 +343,12 @@ autoplot(pcDat,
 ```
 
 > ### Discussion
->
-> Look at the last PCA plot.
-> What is the greatest source of variation?
-> Is there something strange going on with the samples?
+
+What does the PCA plot tell us?
+
+Go to www.menti.com and use the code 62 87 48 to let us know what you think, in a few words.
+
+<!-- amount and source of variation, sample swap, interaction -->
 
 Let's identify these samples. The package `ggrepel` allows us to add text to 
 the plot, but ensures that points that are close together don't have their
@@ -348,7 +368,9 @@ autoplot(pcDat,
 
 The mislabelled samples are *MCL1.DG*, which is labelled as *luminal* but should
 be *basal*, and *MCL1.LA*, which is labelled as *basal* but should be *luminal*.
-Let's fix the sample sheet...We're going to use another `dplyr` command: 
+Let's fix the sample sheet.
+
+We're going to use another `dplyr` command: 
 `mutate`. `mutate` creates new columns in the data frame.
 
 ```{r correctSampleSheet}
@@ -374,13 +396,6 @@ autoplot(pcDat,
          size=5)
 ```
 
-> ### Discussion
->
-> What is the greatest source of variation in the data (i.e. what does
-> dimension 1 represent)?
-> What is the second greatest source of variation in the data?
->
-
 Replicate samples from the same group cluster together in the plot, while 
 samples from different groups form separate clusters. This indicates that the
 differences between groups are larger than those within groups, i.e.,
@@ -395,32 +410,6 @@ replicate. If the PCA plot showed separation of samples by time, it might be
 worthwhile including time in the downstream analysis to account for the
 time-based effect.
 
-## Interactive MDS Plot with Glimma
-
-Another alternative is to generate a Multidimensional scaling (MDS) plot. MDS 
-is similar to PCA, in MDS the distance between each pair of samples in the MDS
-plot is calculated as the 'leading fold change', which is defined as the
-root-mean-square of the largest 500 log2-fold changes between that pair of
-samples. The *Glimma* package creates interactive plots that allow the use to 
-explore the different dimensions.
-
-```{r glimmaMDS, eval=FALSE}
-library(Glimma)
-glMDSPlot(rlogcounts, 
-          labels = sampleinfo$Sample, 
-          groups = sampleinfo[,c("CellType", "Status")], 
-          folder = "mds")
-```
-
-*Glimma* was created to make interactive versions of some of the popular plots
-from the *limma* package. At present it can be used to obtain MDS plots. The
-output of `glMDSPlot` is an html page (/mds/MDS-Plot.html) that shows the MDS
-plot on the left, and the amount of variation explained by each dimension in a
-barplot on the right. The user can hover over points to find out sample
-information, and switch between successive dimensions in the MDS plot by 
-clicking on the bars in the barplot. The default MDS plots shows dimensions 1 
-and 2.
-
 # Convert counts to **DESeqDataSet** object
 
 Next we'll create a `DESeqDataSet` object. This is an object used by `DESeq2` to
@@ -430,8 +419,8 @@ various other parameters about the data.
 
 In the simplest form we need to provide counts, sample information and a design
 formula. For now we just want to perform some QC so we will provide a simple 
-model where would just be concerned with contrasting the differential expression
-between cell types. We can change the model later if we want to.
+model contrasting the differential expression between cell types.
+We can change the model later if we want to.
 
 ```{r makeDDSObj}
 # first lets check that our rows and columns match
@@ -447,7 +436,7 @@ ddsObj <- DESeqDataSetFromMatrix(countData = countdata,
 ## Normalisation
 
 The `estimateSizeFactors` command of `DESeq2` applies the "median ratio method"
-of normalisation[@Huber2010]. This generates a set of normalization factors and 
+of normalisation [@Huber2010]. This generates a set of normalization factors and 
 adds them to the `ddsObj` in the `colData` slot.
 
 ```{r estimateSizeFactors}
@@ -469,7 +458,7 @@ size and is equivalent to downscaling the counts.
 
 The MCL1.LE and MCL1.LF have much smaller normalisation factors, and MCL1.LA
 and MCL1.LB have the largest. If we plot MAplots using the `plotMA` in `limma`
-[Ritchie2015] function for these samples, we should be able to see the
+[@Ritchie2015] function for these samples, we should be able to see the
 composition bias problem. 
 
 The `rlog` data (`logcounts`) has already been normalised for both library size
@@ -505,11 +494,17 @@ abline(h=0,col="red")
 
 > ### Challenge 2
 >
-> Plot the biased and unbiased MA plots both samples side by side to see the 
-> before and after normalisation.
+> Plot the biased and unbiased MA plots for both samples side by side to see the 
+> effect of normalisation.
 >
 
-```{r solutionChallenge3, echo=FALSE, fig.height=10, fig.width=10}
+```{r proProcObjChal2, echo=FALSE, eval=FALSE}
+# have object ready for challenge
+# need logcounts and logNormalizedCounts
+save(countdata, sampleinfo, file="Robjects/preprocessingChal2.RData")
+```
+
+```{r solutionChallenge2, echo=FALSE, fig.height=10, fig.width=10}
 
 ```
 
