@@ -3,9 +3,9 @@ title: "RNA-seq analysis in R"
 author: "Stephane Ballereau, Dominique-Laurent Couturier, Mark Dunning, Abbi Edwards, Ashley Sawle"
 date: '`r format(Sys.time(), "Last modified: %d %b %Y")`'
 output:
-  html_notebook:
-    toc: yes
   html_document:
+    toc: yes
+  html_notebook:
     toc: yes
 minutes: 300
 layout: page
@@ -15,7 +15,11 @@ editor_options:
   chunk_output_type: inline
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=TRUE, cache=FALSE}
+getwd()  
+knitr::opts_knit$set(root.dir = normalizePath(".."))
+knitr::opts_knit$get("root.dir")
+
 library(tidyverse)
 ```
 
@@ -28,19 +32,18 @@ Various ways exist to test for enrichment of biological pathways.
 
 # GSEA analysis
 
-Gene Set Enrichment Analysis GSEA was tests whether a set of genes of interest, 
-e.g. genes
-[@Subramanian15545]. The software is distributed by the [Broad 
-Institute](http://software.broadinstitute.org/gsea/index.jsp) and is freely 
-available for use by academic and non-profit organisations. 
+Gene Set Enrichment Analysis (GSEA) identifies gene sets that are related to the
+difference of interest between samples [@Subramanian15545]. A gene set comprises
+genes that share a biological function, chromosomal location, or any other
+relevant criterion.
 
-In addition to the GSEA software the Broad also provide a number of very well 
-curated `gene set`s for testing against your data - the [Molecular Signatures 
-Database (MSigDB)](http://software.broadinstitute.org/gsea/msigdb/index.jsp). 
-Unfortunately, these are collections of human genes, however, these lists
+The software is distributed by the [Broad Institute](http://software.broadinstitute.org/gsea/index.jsp)
+and is freely available for use by academic and non-profit organisations.
+The Broad also provide a number of very well curated `gene set`s
+for testing against your data - the [Molecular Signatures Database (MSigDB)](http://software.broadinstitute.org/gsea/msigdb/index.jsp). 
+These are collections of human genes, however. Fortunately, these lists
 have been translated to mouse equivalents by the Walter+Eliza Hall Institutes
-Bioinformatics service and made avaialble for [download](http://bioinf.wehi.edu.au/software/MSigDB/).
-
+Bioinformatics service and made available for [download](http://bioinf.wehi.edu.au/software/MSigDB/).
 
 The analysis is performed by:
 
@@ -50,10 +53,9 @@ ranked `data set`
 - (iii) calculating an enrichment score (ES) that represents the difference 
 between the observed rankings and that which would be expected assuming a random 
 rank distribution.
-
-[commentary on GSEA](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1266131/). 
+ 
 The article describing the original software is available 
-[here](http://www.pnas.org/content/102/43/15545.long).
+[here](http://www.pnas.org/content/102/43/15545.long), while this [commentary on GSEA](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1266131/) provides a shorter description.
 
 ## `fgsea`
 
@@ -103,9 +105,9 @@ fgseaRes <- fgsea(pathwaysH,
 ```
 
 The warning produced indicates that there are few genes that have the same fold
-change and so are ranked equally. `fgsea` with arbitrarily order determine which
+change and so are ranked equally. `fgsea` arbitrarily determines which
 comes first in the ranked list. As long as this number is small it shouldn't
-significantly effect the results. If the number is large something is 
+significantly affect the results. If the number is large something is 
 suspicious about the fold change results.
 
 Lets look at the top 10 results.
@@ -135,7 +137,7 @@ explanation.
 
 ## GSEA table plot
 
-The function `plotGseaTable` allows us to plot a summary figue showing the 
+The function `plotGseaTable` allows us to plot a summary figure showing the 
 results for multiple pathways.
 
 ```{r gseaTablePlot}
@@ -189,24 +191,16 @@ null distribution for GO category membership.
 consideration makes this approach robust, only correcting for the length bias 
 present in the data.
 
-"GO analysis of RNA-seq data requires the use of random sampling in order to 
-generate a suitable null distribution for GO category membership and calculate 
-each category's significance for over representation amongst DE genes. ... In 
-most  cases,  the  Wallenius distribution can be used to approximate the true 
-null distribution, without any significant loss in accuracy. The goseq package 
-implements this approximation as its default option."
-
 ```{r neededPackage, eval = FALSE, echo = FALSE, include = FALSE}
 library(org.Mm.eg.db)
 ```
 
-
-```{r goSeqPackage, eval=FALSE}
+```{r goSeqPackage, echo=FALSE, message=FALSE, warning=FALSE}
 library(goseq)
 supportedOrganisms() %>% filter(str_detect(Genome, "mm"))
 ```
 
-```{r goSeqPackageprint, echo=FALSE, message=FALSE, warning=FALSE}
+```{r goSeqPackageTibble, echo=FALSE, message=FALSE, warning=FALSE}
 library(goseq)
 supportedOrganisms() %>% filter(str_detect(Genome, "mm"))  %>%  
     as_tibble()
@@ -217,12 +211,12 @@ supportedOrganisms() %>% filter(str_detect(Genome, "mm"))  %>%
 The input for `goseq` is a vector that indicates, for each gene, whether or not
 it is significantly differentially expressed. This should be a named vector, 
 where the names are the gene ids and the values are *`1`* if the gene is 
-significant and a *`0`* if it is not.
+significant and *`0`* if it is not.
 
 In this case we can use the Ensembl gene IDs.
 
 ```{r getDEGs}
-sigData <- as.integer( shrinkLvV$FDR < 0.01 & !is.na(shrinkLvV$FDR) )
+sigData <- as.integer(!is.na(shrinkLvV$FDR) & shrinkLvV$FDR < 0.01)
 names(sigData) <- shrinkLvV$GeneID
 ```
 
@@ -292,7 +286,7 @@ search_kegg_organism('mmu', by='kegg_code')
 
 The input for the KEGG enrichment is list of gene IDs for significant genes. 
 
-This time we'll only use gene with an absolute fold change greater than 2.
+This time we'll only use genes with an absolute fold change greater than 2.
 
 For this tool we need to use Entrez IDs, so once again we will have to eliminate
 the missing values.
@@ -343,20 +337,14 @@ colour by any numeric vector, e.g. p-value).
 The package plots the KEGG pathway to a `png` file in the working directory.
 
 ```{r pathview, message=F}
-library(pathview)
 
-logFC <- annotLvV$logFC
-names(logFC) <- annotLvV$Entrez
-
-pathview(gene.data = logFC, 
-         pathway.id = "mmu03320", 
-         species = "mmu", 
-         limit = list(gene=5, cpd=1))
 ```
 
 mmu03320.pathview.png:
 
-![mmu03320 - PPAR signaling pathway](../images/mmu03320.pathview.png)
+![mmu03320 - PPAR signaling pathway](/home/ubuntu/Course_Materials/results/mmu03320.pathview.png)
+
+
 
 > ## Challenge 3 {.challenge}
 >
