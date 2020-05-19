@@ -48,7 +48,7 @@ ddsObj <- DESeqDataSetFromMatrix(countData = countdata,
                               colData = sampleinfo,
                               design = design)
 ddsObj <- estimateSizeFactors(ddsObj)
-# normalise dcounts
+# normalised counts
 logcounts <- log2(countdata + 1)
 normalizedCounts <- counts(ddsObj, normalized=TRUE) 
 logNormalizedCounts <- log2(normalizedCounts + 1)
@@ -73,7 +73,6 @@ boxplot(rlogcounts,
         col=statusCol)
 # Let's add a blue horizontal line that corresponds to the median logCPM
 abline(h=median(as.matrix(logcounts)), col="blue")
-
 ```
 
 ### Challenge 2
