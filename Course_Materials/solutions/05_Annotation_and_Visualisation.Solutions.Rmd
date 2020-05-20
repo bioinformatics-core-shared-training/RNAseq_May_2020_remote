@@ -13,7 +13,6 @@ layout: page
 
 ```{r setup, include=FALSE}
 library(EnsDb.Mmusculus.v79)
-library(GenomicFeatures)
 library(DESeq2)
 library(tidyverse)
 ```
@@ -27,13 +26,26 @@ load("../Robjects/DE.RData")
 ## Retrieve full annotation
 
 > ### Challenge 1 {.challenge}
+
+> A reminder of the code we ran:
+
+># lets set it up
+ourCols <- c("SYMBOL", "GENEID", "ENTREZID")
+ourKeys <- rownames(resLvV)[1:1000]
+
+># run the query
+annot <- AnnotationDbi::select(EnsDb.Mmusculus.v79, 
+                keys=ourKeys, 
+                columns=ourCols, 
+                keytype="GENEID")
+
 > That was just 1000 genes. We need annotations for the entire results table.
 >   
-> (a) Query BioMart using all of the genes in our results table (`resLvV`)  
+> (a) Run the same query using all of the genes in our results table (`resLvV`)  
 >
-> (b) Can we also have the biotype of our genes too?
+> (b) Can we also have the biotype of our genes too? Hint: You can find the name of the column for this by running columns(EnsDb.Mmusculus.v79)
 >
-> (c) How many Ensembl genes have multipe Entrez IDs associated with them?  
+> (c) How many Ensembl genes have multipe Entrez IDs associated with them?
 
 
 ```{r solutionChallenge1code, eval=FALSE, message=FALSE, warnings=FALSE}
