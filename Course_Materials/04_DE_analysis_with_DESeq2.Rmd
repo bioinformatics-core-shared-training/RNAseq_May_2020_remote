@@ -17,8 +17,7 @@ options(tibble.print_max = 4, tibble.print_min = 4, max.print=40,
 # Recap of pre-processing
 
 The previous section walked-through the pre-processing and transformation of the
-count data. Here, for completeness, we list the minimal steps required to 
-process the data prior to differential expression analysis.
+count data.
 
 ```{r recap, eval = FALSE}
 # Read the sample information into a data frame
@@ -59,6 +58,98 @@ dim(countdata)
 sampleinfo
 ```
 
+# Convert counts to **DESeqDataSet** object
+
+Next we'll create a `DESeqDataSet` object. This is an object used by `DESeq2` to
+store count data. It has a number of slots for storing count data, sample 
+information, the model design for the differential expression analysis, and
+various other parameters about the data.
+
+In the simplest form we need to provide counts, sample information and a design
+formula. For now we just want to perform some QC so we will provide a simple 
+model contrasting the differential expression between cell types.
+We can change the model later if we want to.
+
+```{r createDDSObj}
+# first lets check that our rows and columns match
+all(sampleinfo$Sample == colnames(countdata))
+# create the design formula
+design <- as.formula(~ CellType)
+# create the DESeqDataSet object
+ddsObj <- DESeqDataSetFromMatrix(countData = countdata,
+                              colData = sampleinfo,
+                              design = design)
+```
+
+## Normalisation
+
+The `estimateSizeFactors` command of `DESeq2` applies the "median ratio method"
+of normalisation [@Huber2010]. This generates a set of normalization factors and 
+adds them to the `ddsObj` in the `colData` slot.
+
+```{r estimateSizeFactors}
+# Apply normalisation to DDS object
+ddsObj <- estimateSizeFactors(ddsObj)
+```
+
+Take a look at the normalisation factors for these samples.
+
+```{r vizNormFactors}
+sizeFactors(ddsObj)
+```
+
+A normalization factor below one indicates that the library size will be scaled
+down, as there is more suppression (i.e., composition bias) in that library
+relative to the other libraries. This is also equivalent to scaling the counts
+upwards in that sample. Conversely, a factor above one scales up the library
+size and is equivalent to downscaling the counts.
+
+The MCL1.LE and MCL1.LF have much smaller normalisation factors, and MCL1.LA
+and MCL1.LB have the largest. If we plot MAplots using the `plotMA` in `limma`
+[@Ritchie2015] function for these samples, we should be able to see the
+composition bias problem. 
+
+The `rlog` data (`logcounts`) has already been normalised for both library size
+and composition bias. Let's have a look at the raw `countsdata`; we will need
+to log2 scale it first.
+
+```{r plotRawMA, fig.height=5, fig.width=10, message = FALSE}
+library(limma)
+logcounts <- log2(countdata + 1)
+
+par(mfrow=c(1,2))
+plotMA(logcounts, array = 7)
+abline(h=0, col="red")
+plotMA(logcounts, array = 11)
+abline(h=0, col="red")
+```
+
+The MA plots show log-fold-changes (difference: y-axis) against average
+expression (mean: x-axis). Because our `ddsObj` object contains the
+normalisation factors, if we redo these plots using `ddsObj`, we should see the
+composition bias problem has been solved.
+
+```{r plotNormedMA, fig.height=5, fig.width=10}
+normalizedCounts <- counts(ddsObj, normalized=TRUE) 
+logNormalizedCounts <- log2(normalizedCounts + 1)
+
+par(mfrow=c(1,2))
+plotMA(logNormalizedCounts, array = 7)
+abline(h=0,col="red")
+plotMA(logNormalizedCounts, array = 11)
+abline(h=0,col="red")
+```
+
+> ### Exercise 1
+>
+> Plot the biased and unbiased MA plots for both samples side by side to see the 
+> effect of normalisation.
+>
+
+```{r solutionExercise1, echo=FALSE, fig.height=10, fig.width=10}
+
+```
+
 # The model formula and design matrices
 
 Now that we are happy that the quality of the data looks good, we can 
@@ -93,6 +184,7 @@ design <- as.formula(~ Status)
 ```
 
 What does this look like as a model matrix?
+
 ```{r modelMatrix}
 modelMatrix <- model.matrix(design, data = sampleinfo)
 modelMatrix
@@ -120,7 +212,6 @@ ddsObj.raw <- DESeqDataSetFromMatrix(countData = countdata,
                                      colData = sampleinfo,
                                      design = design)
 ```
-
 
 # Differential expression analysis with DESeq2
 
@@ -230,7 +321,7 @@ topGenesPvV <- as.data.frame(resPvV_status) %>%
 topGenesPvV
 ```
 
-### Exercise 1
+### Exercise 2
 
 > So far we have fitted a simple model considering just "Status", but in reality 
 > we want to model the effects of both "Status" and "Cell Type".
@@ -374,7 +465,7 @@ including both terms in the linear model.
 Although we have a result for each gene, in practice we should choose one model 
 or the other and apply it to all genes.
 
-### Exercise 2
+### Exercise 3
 >
 > When we looked at the PCA it did seem that an interaction model might be
 > warranted. Let's test that.  

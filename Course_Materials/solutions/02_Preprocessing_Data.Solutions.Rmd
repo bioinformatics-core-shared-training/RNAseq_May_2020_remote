@@ -58,7 +58,7 @@ logNormalizedCounts <- log2(normalizedCounts + 1)
 >
 > 1. Use the `DESeq2` function `rlog` to transform the count data. This function
 > also normalises for library size.
-> 2. Plot the count distribution boxplots with this data
+> 2. Plot the count distribution boxplots with this data.
 > How has this effected the count distributions?
 
 ```{r}
@@ -73,22 +73,4 @@ boxplot(rlogcounts,
         col=statusCol)
 # Let's add a blue horizontal line that corresponds to the median logCPM
 abline(h=median(as.matrix(logcounts)), col="blue")
-```
-
-### Challenge 2
->
-> Plot the biased and unbiased MA plots both samples side by side to see the 
-> before and after normalisation.
->
-
-```{r solutionChallenge3, fig.height=10, fig.width=10, collapse=TRUE}
-par(mfrow=c(2,2))
-plotMA(logcounts, array = 7, main="MCL1.LA - Raw")
-abline(h=0,col="grey")
-plotMA(logNormalizedCounts, array = 7, main="MCL1.LA - Normalised")
-abline(h=0,col="grey")
-plotMA(logcounts, array = 11, main="MCL1.LE - Raw")
-abline(h=0,col="grey")
-plotMA(logNormalizedCounts, array = 11, main="MCL1.LE - Normalised")
-abline(h=0,col="grey")
 ```

@@ -4,9 +4,9 @@ subtitle: "Pre-processsing RNA-seq data"
 author: "Stephane Ballereau, Dominique-Laurent Couturier, Mark Dunning, Abbi Edwards, Ashley Sawle"
 date: '`r format(Sys.time(), "Last modified: %d %b %Y")`'
 output:
-  html_notebook:
-    toc: yes
   html_document:
+    toc: yes
+  html_notebook:
     toc: yes
 minutes: 300
 layout: page
@@ -19,18 +19,16 @@ editor_options:
 
 In this section we will begin the process of analysing the RNAseq in R. In the
 next section we will use [DESeq2](https://bioconductor.org/packages/release/bioc/html/DESeq2.html)
-for differential analysis. Before we do that we need to:
+for differential analysis. A detailed analysis workflow, recommended by the authors of DESeq2 can be found
+on [the Bionconductor 
+website](http://master.bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html).
+
+Before we do that we need to:
 
 * import our counts into R
 * manipulate the imported data so that it is in the correct format for DESeq2
 * filter out unwanted genes
 * run some initial QC on the raw count data
-
-We will also look at the effects of normalisation for composition bias.
-
-A detailed analysis workflow, recommended by the authors of DESeq2 can be found
-on [the Bionconductor 
-website](http://master.bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html).
 
 # Data import
 
@@ -236,7 +234,8 @@ librarySizes <- colSums(countdata)
 barplot(librarySizes, 
         names=names(librarySizes), 
         las=2, 
-        main="Barplot of library sizes")
+        main="Barplot of library sizes",
+        cex.axis = 0.8)
 abline(h=20e6, lty=2)
 ```
 
@@ -405,104 +404,6 @@ first replicate of each group was prepared at a separate time from the second
 replicate. If the PCA plot showed separation of samples by time, it might be
 worthwhile including time in the downstream analysis to account for the
 time-based effect.
-
-# Convert counts to **DESeqDataSet** object
-
-Next we'll create a `DESeqDataSet` object. This is an object used by `DESeq2` to
-store count data. It has a number of slots for storing count data, sample 
-information, the model design for the differential expression analysis, and
-various other parameters about the data.
-
-In the simplest form we need to provide counts, sample information and a design
-formula. For now we just want to perform some QC so we will provide a simple 
-model contrasting the differential expression between cell types.
-We can change the model later if we want to.
-
-```{r makeDDSObj}
-# first lets check that our rows and columns match
-all(sampleinfo$Sample == colnames(countdata))
-# create the design formula
-design <- as.formula(~ CellType)
-# create the DESeqDataSet object
-ddsObj <- DESeqDataSetFromMatrix(countData = countdata,
-                              colData = sampleinfo,
-                              design = design)
-```
-
-## Normalisation
-
-The `estimateSizeFactors` command of `DESeq2` applies the "median ratio method"
-of normalisation [@Huber2010]. This generates a set of normalization factors and 
-adds them to the `ddsObj` in the `colData` slot.
-
-```{r estimateSizeFactors}
-# Apply normalisation to DDS object
-ddsObj <- estimateSizeFactors(ddsObj)
-```
-
-Take a look at the normalisation factors for these samples.
-
-```{r vizNormFactors}
-sizeFactors(ddsObj)
-```
-
-A normalization factor below one indicates that the library size will be scaled
-down, as there is more suppression (i.e., composition bias) in that library
-relative to the other libraries. This is also equivalent to scaling the counts
-upwards in that sample. Conversely, a factor above one scales up the library
-size and is equivalent to downscaling the counts.
-
-The MCL1.LE and MCL1.LF have much smaller normalisation factors, and MCL1.LA
-and MCL1.LB have the largest. If we plot MAplots using the `plotMA` in `limma`
-[@Ritchie2015] function for these samples, we should be able to see the
-composition bias problem. 
-
-The `rlog` data (`logcounts`) has already been normalised for both library size
-and composition bias. Let's have a look at the raw `countsdata`; we will need
-to log2 scale it first.
-
-```{r plotRawMA, fig.height=5, fig.width=10, message = FALSE}
-library(limma)
-logcounts <- log2(countdata + 1)
-
-par(mfrow=c(1,2))
-plotMA(logcounts, array = 7)
-abline(h=0, col="red")
-plotMA(logcounts, array = 11)
-abline(h=0, col="red")
-```
-
-The MA plots show log-fold-changes (difference: y-axis) against average
-expression (mean: x-axis). Because our `ddsObj` object contains the
-normalisation factors, if we redo these plots using `ddsObj`, we should see the
-composition bias problem has been solved.
-
-```{r plotNormedMA, fig.height=5, fig.width=10}
-normalizedCounts <- counts(ddsObj, normalized=TRUE) 
-logNormalizedCounts <- log2(normalizedCounts + 1)
-
-par(mfrow=c(1,2))
-plotMA(logNormalizedCounts, array = 7)
-abline(h=0,col="red")
-plotMA(logNormalizedCounts, array = 11)
-abline(h=0,col="red")
-```
-
-> ### Challenge 2
->
-> Plot the biased and unbiased MA plots for both samples side by side to see the 
-> effect of normalisation.
->
-
-```{r proProcObjChal2, echo=FALSE, eval=FALSE}
-# have object ready for challenge
-# need logcounts and logNormalizedCounts
-save(countdata, sampleinfo, file="Robjects/preprocessingChal2.RData")
-```
-
-```{r solutionChallenge2, echo=FALSE, fig.height=10, fig.width=10}
-
-```
 
 ## Export data
 
