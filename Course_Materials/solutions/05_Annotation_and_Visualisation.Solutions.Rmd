@@ -21,7 +21,6 @@ library(tidyverse)
 load("../Robjects/DE.RData")
 ```
 
-### Challenge 1
 
 ## Retrieve full annotation
 
@@ -29,15 +28,17 @@ load("../Robjects/DE.RData")
 
 > A reminder of the code we ran:
 
-># lets set it up
+```
+# lets set it up
 ourCols <- c("SYMBOL", "GENEID", "ENTREZID")
 ourKeys <- rownames(resLvV)[1:1000]
 
-># run the query
+# run the query
 annot <- AnnotationDbi::select(EnsDb.Mmusculus.v79, 
                 keys=ourKeys, 
                 columns=ourCols, 
                 keytype="GENEID")
+```
 
 > That was just 1000 genes. We need annotations for the entire results table.
 >   
@@ -65,15 +66,30 @@ annot %>%
     dplyr::filter(n>1)
 ```
 
-### Challenge 2 {.challenge}
+> ### Challenge 2 {.challenge}
 
-Use the log2 fold change (`logFC`) on the x-axis, and use `-log10(FDR)` on the
-y-axis. (This >`-log10` transformation is commonly used for p-values as it
-means that more significant genes have a higher scale).
+If you haven't already make sure you load in our data and annotation. Then shrink the values. You can copy and paste the code below.
 
-> (a) Create a column of -log10(FDR) values
+```
+# First load data and annotations
+load("../Robjects/DE.RData")
+load("../Robjects/Ensembl_annotations.RData")
+
+#Shrink our values
+ddsShrink <- lfcShrink(ddsObj, coef="Status_lactate_vs_virgin")
+shrinkLvV <- as.data.frame(ddsShrink) %>%
+    rownames_to_column("GeneID") %>% 
+    left_join(ensemblAnnot, "GeneID") %>% 
+    rename(logFC=log2FoldChange, FDR=padj)
+```
+
+> Use the log2 fold change (`logFC`) on the x-axis, and use `-log10(pvalue)` on the y-axis.
+> (This `-log10` transformation is commonly used for p-values as it means that more
+> significant genes have a higher scale) 
 >
-> (b) Create a plot with points coloured by if FDR < 0.05
+> (a) Create a new column of -log10(pvalue) values in shrinkLvV
+>
+> (b) Create a plot with points coloured by pvalue < 0.05 similar to how we did in the MA plot
 
 
 ```{r volcanoPlot, fig.height=5, fig.width=7}
