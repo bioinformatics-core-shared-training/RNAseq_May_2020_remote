@@ -122,15 +122,17 @@ could concatenate the Entrez IDs so that we don't lose information.
 
 > A reminder of the code we ran:
 
-># lets set it up
+```
+# lets set it up
 ourCols <- c("SYMBOL", "GENEID", "ENTREZID")
 ourKeys <- rownames(resLvV)[1:1000]
 
-># run the query
+# run the query
 annot <- AnnotationDbi::select(EnsDb.Mmusculus.v79, 
                 keys=ourKeys, 
                 columns=ourCols, 
                 keytype="GENEID")
+```
 
 > That was just 1000 genes. We need annotations for the entire results table.
 >   
@@ -261,6 +263,7 @@ displays a measure of significance on the y-axis and fold-change on the x-axis.
 
 If you haven't already make sure you load in our data and annotation. Then shrink the values. You can copy and paste the code below.
 
+```
 # First load data and annotations
 load("../Robjects/DE.RData")
 load("../Robjects/Ensembl_annotations.RData")
@@ -271,6 +274,7 @@ shrinkLvV <- as.data.frame(ddsShrink) %>%
     rownames_to_column("GeneID") %>% 
     left_join(ensemblAnnot, "GeneID") %>% 
     rename(logFC=log2FoldChange, FDR=padj)
+```
 
 > Use the log2 fold change (`logFC`) on the x-axis, and use `-log10(pvalue)` on the y-axis.
 > (This `-log10` transformation is commonly used for p-values as it means that more
