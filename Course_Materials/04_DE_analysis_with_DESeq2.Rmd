@@ -413,17 +413,33 @@ or the other and apply it to all genes.
 >  
 > 1. Create a new DESeq2 object using a model with an interaction between 
 >    CellType and Status. The model formula should be 
->    `~CellType + Status + CellType:Status`, where `CellType:Status` is the 
->     parameter for the interaction beteween CellType and> Status.
+>
+>    `~CellType + Status + CellType:Status`
+>
+>    where `CellType:Status` is the parameter for the interaction beteween 
+>    CellType and Status.  
+>    Look back at the code at the beginning of Exercise 1 to remind you how to 
+>    do this.
 >
 > Note that `*` can be used as shortcut to add the interaction term,
 > e.g. `~CellType * Status`, however, writing out in long form is clearer here.
 >
 > 2. Use the LRT to compare this to the simpler additive model 
 >    (`~CellType + Status`)
-> 3. For how many genes is interaction model a better fit?  
-> 4. Do you think the experimental design is good enough to include the 
->    interaction? If not, why?    
+>
+> 3. Extract a table of results using `results`. 
+>
+> #### Questions:
+>  
+>    For how many genes is interaction model a better fit?  
+>
+>    Do you think we need to use the interaction model for this analysis?
+>
+>    Do you think the experimental design is good enough to include the 
+>    interaction? 
+>
+>    If not, why and how would you change it?   
+>
 
 ```{r eval=FALSE, echo=FALSE, include=FALSE}
 design <- as.formula(~ CellType * Status)

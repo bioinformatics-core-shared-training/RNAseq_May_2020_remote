@@ -776,15 +776,21 @@ resCvCS</code></pre>
 <p>When we looked at the PCA it did seem that an interaction model might be warranted. Let’s test that.</p>
 <h4 id="challenge" class="challenge">Challenge</h4>
 <ol style="list-style-type: decimal">
-<li>Create a new DESeq2 object using a model with an interaction between CellType and Status. The model formula should be <code>~CellType + Status + CellType:Status</code>, where <code>CellType:Status</code> is the parameter for the interaction beteween CellType and&gt; Status.</li>
+<li><p>Create a new DESeq2 object using a model with an interaction between CellType and Status. The model formula should be</p>
+<p><code>~CellType + Status + CellType:Status</code></p>
+<p>where <code>CellType:Status</code> is the parameter for the interaction beteween CellType and Status.<br />
+Look back at the code at the beginning of Exercise 1 to remind you how to do this.</p></li>
 </ol>
 <p>Note that <code>*</code> can be used as shortcut to add the interaction term, e.g. <code>~CellType * Status</code>, however, writing out in long form is clearer here.</p>
 <ol start="2" style="list-style-type: decimal">
-<li>Use the LRT to compare this to the simpler additive model (<code>~CellType + Status</code>)</li>
-<li>For how many genes is interaction model a better fit?<br />
-</li>
-<li>Do you think the experimental design is good enough to include the interaction? If not, why?</li>
+<li><p>Use the LRT to compare this to the simpler additive model (<code>~CellType + Status</code>)</p></li>
+<li><p>Extract a table of results using <code>results</code>.</p></li>
 </ol>
+<h4 id="questions">Questions:</h4>
+<p>For how many genes is interaction model a better fit?</p>
+<p>Do you think we need to use the interaction model for this analysis?</p>
+<p>Do you think the experimental design is good enough to include the interaction?</p>
+<p>If not, why and how would you change it?</p>
 </blockquote>
 </div>
 </div>
