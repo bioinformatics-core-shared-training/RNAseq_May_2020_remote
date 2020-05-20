@@ -109,18 +109,19 @@ Methods](html/A_Introduction_to_RNAseq_Methods.html) - Sankari Nagarajan
 
 10:00 - 12:00 - [RNA-seq Pre-processing](html/02_Preprocessing_Data.html) -
 Stephane Ballereau  
-<!--     - [Practical solutions](html/02_Preprocessing_Data.Solutions.html)   -->
+    - [Practical solutions](html/02_Preprocessing_Data.Solutions.html) 
 
 13:00 - 15:00 Statistical Analysis of Bulk RNAseq Data - Dominique-Laurent  
-Couturier   
-    - [Slides](html/StatsRNAseq_Couturier_20-05-2020.pdf)
-    - [Practical (html)](html/StatsRNAseq_Couturier_20-05-2020.html)  
+Couturier     
+    - [Slides](html/StatsRNAseq_Couturier_20-05-2020.pdf)   
+    - [Practical (html)](html/StatsRNAseq_Couturier_20-05-2020.html)   
     - [Practical (rmd)](html/StatsRNAseq_Couturier_20-05-2020.Rmd)  
 
 15:00 - 16:00 Experimental Design of Bulk RNAseq studies - Sankari Nagarajan  
     - [Slides](html/ExperimentalDesignCourse_Nagarajan_20-05-2020.pdf)  
-    - [Practical](html/RNAseq_ExperimentalDesignPractical.pdf)  
- 
+    - [Practical](html/RNAseq_ExperimentalDesignPractical.pdf)    
+      [Practical Answers](html/RNAseq_ExperimentalDesignPractical_Answers.pdf)   
+
 ### Day 3
 
 9:30 - 12:00 - [Differential Expression for
