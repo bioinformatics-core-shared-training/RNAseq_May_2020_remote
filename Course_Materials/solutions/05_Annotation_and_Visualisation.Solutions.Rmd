@@ -61,9 +61,12 @@ annot <-AnnotationDbi::select(EnsDb.Mmusculus.v79,
                 columns=ourCols, 
                 keytype="GENEID")
 # multiple EntrezIDs
-annot %>%  
-    add_count(GENEID) %>%  
-    dplyr::filter(n>1)
+multiples <- annot %>%
+  add_count(GENEID) %>%  
+  dplyr::filter(n>1)
+
+length(unique(multiples$SYMBOL))
+
 ```
 
 > ### Challenge 2 {.challenge}

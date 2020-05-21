@@ -1512,7 +1512,7 @@ div.tocify {
 <h1 class="title toc-ignore">RNA-seq Analysis in R</h1>
 <h3 class="subtitle">Annotation and Visualisation of RNA-seq results - Solutions</h3>
 <h4 class="author">Stephane Ballereau, Dominique-Laurent Couturier, Mark Dunning, Abbi Edwards, Ashley Sawle</h4>
-<h4 class="date">Last modified: 20 May 2020</h4>
+<h4 class="date">Last modified: 21 May 2020</h4>
 
 </div>
 
@@ -1552,9 +1552,11 @@ annot &lt;-AnnotationDbi::select(EnsDb.Mmusculus.v79,
                 columns=ourCols, 
                 keytype=&quot;GENEID&quot;)
 # multiple EntrezIDs
-annot %&gt;%  
-    add_count(GENEID) %&gt;%  
-    dplyr::filter(n&gt;1)</code></pre>
+multiples &lt;- annot %&gt;%
+  add_count(GENEID) %&gt;%  
+  dplyr::filter(n&gt;1)
+
+length(unique(multiples$SYMBOL))</code></pre>
 <blockquote>
 <h3 id="challenge-2" class="challenge">Challenge 2</h3>
 </blockquote>
