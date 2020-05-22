@@ -47,7 +47,7 @@ you can do this combining the sign of the fold change and the pvalue.
 > results differ from the ones we got when ranking by the fold change alone?  
 
 ```{r solution1}
-ranks <- -log10(gseaDat$pvalue) * sign(gseaDat$logFC)
+ranks <- -log10(gseaDat$pvalue) * sign(gseaDat$logFC) # or gseaDat$stat
 names(ranks) <- gseaDat$Entrez  
 
 load("../Robjects/mouse_c2_v5.RData")
@@ -58,8 +58,6 @@ head(fgseaResC2[order(padj, -abs(NES)), ], n=10)
 
 fgseaResH <- fgsea(pathwaysH, ranks, minSize=15, maxSize = 500, nperm=1000)
 head(fgseaResH[order(padj, -abs(NES)), ], n=20)
-
-head(fgseaRes[order(padj, -abs(NES)), ], n=20)
 ```
 
 ### Challenge 2
@@ -104,8 +102,8 @@ goResultsUp %>%
 ```{r solution3}
 sigGenes <- shrinkLvV$FDR < 0.01 & !is.na(shrinkLvV$FDR)
 
-logFC <- annotLvV$logFC[sigGenes]
-names(logFC) <- annotLvV$Entrez[sigGenes]
+logFC <- shrinkLvV$logFC[sigGenes]
+names(logFC) <- shrinkLvV$Entrez[sigGenes]
 
 pathview(gene.data = logFC, 
          pathway.id = "mmu04060", 
@@ -115,5 +113,5 @@ pathview(gene.data = logFC,
 
 mmu04060.pathview.png:
 
-![mmu04060 -Cytokine-cytokine receptor interaction](../../images/mmu04060.pathview.png)
+![mmu04060 -Cytokine-cytokine receptor interaction](../images/mmu04060.pathview.png)
 

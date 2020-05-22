@@ -1512,7 +1512,7 @@ div.tocify {
 <h1 class="title toc-ignore">RNA-seq analysis in R</h1>
 <h3 class="subtitle">Gene Set Testing for RNA-seq - Solutions</h3>
 <h4 class="author">Stephane Ballereau, Dominique-Laurent Couturier, Mark Dunning, Abbi Edwards, Ashley Sawle</h4>
-<h4 class="date">Last modified: 19 May 2020</h4>
+<h4 class="date">Last modified: 22 May 2020</h4>
 
 </div>
 
@@ -1531,7 +1531,7 @@ div.tocify {
 <li>Run <code>fgsea</code> using the new ranked genes and the H pathways. How do these results differ from the ones we got when ranking by the fold change alone?</li>
 </ol>
 </blockquote>
-<pre class="r"><code>ranks &lt;- -log10(gseaDat$pvalue) * sign(gseaDat$logFC)
+<pre class="r"><code>ranks &lt;- -log10(gseaDat$pvalue) * sign(gseaDat$logFC) # or gseaDat$stat
 names(ranks) &lt;- gseaDat$Entrez  
 
 load(&quot;../Robjects/mouse_c2_v5.RData&quot;)
@@ -1546,37 +1546,37 @@ fgseaResC2 &lt;- fgsea(pathwaysC2, ranks, minSize=15, maxSize = 500, nperm=1000)
 ## The order of those tied genes will be arbitrary, which may produce unexpected results.</code></pre>
 <pre class="r"><code>head(fgseaResC2[order(padj, -abs(NES)), ], n=10)</code></pre>
 <pre><code>##                                                                    pathway
-##  1: REACTOME_NONSENSE_MEDIATED_DECAY_ENHANCED_BY_THE_EXON_JUNCTION_COMPLEX
-##  2:                                          REACTOME_INFLUENZA_LIFE_CYCLE
+##  1:                                          REACTOME_INFLUENZA_LIFE_CYCLE
+##  2: REACTOME_NONSENSE_MEDIATED_DECAY_ENHANCED_BY_THE_EXON_JUNCTION_COMPLEX
 ##  3:                       REACTOME_3_UTR_MEDIATED_TRANSLATIONAL_REGULATION
 ##  4:             REACTOME_INFLUENZA_VIRAL_RNA_TRANSCRIPTION_AND_REPLICATION
 ##  5:                                      REACTOME_PEPTIDE_CHAIN_ELONGATION
 ##  6:                                                          KEGG_RIBOSOME
 ##  7:                                            REACTOME_METABOLISM_OF_MRNA
-##  8:   REACTOME_SRP_DEPENDENT_COTRANSLATIONAL_PROTEIN_TARGETING_TO_MEMBRANE
-##  9:                                             REACTOME_METABOLISM_OF_RNA
+##  8:                                             REACTOME_METABOLISM_OF_RNA
+##  9:   REACTOME_SRP_DEPENDENT_COTRANSLATIONAL_PROTEIN_TARGETING_TO_MEMBRANE
 ## 10:                                                   REACTOME_TRANSLATION
-##            pval       padj         ES       NES nMoreExtreme size
-##  1: 0.002222222 0.04544153 -0.8873458 -2.712092            0  100
-##  2: 0.002237136 0.04544153 -0.8585177 -2.710279            0  128
-##  3: 0.002222222 0.04544153 -0.8855713 -2.706668            0  100
-##  4: 0.002267574 0.04544153 -0.8842923 -2.677502            0   95
-##  5: 0.002267574 0.04544153 -0.9083812 -2.657404            0   79
-##  6: 0.002202643 0.04544153 -0.8967344 -2.651787            0   81
-##  7: 0.002336449 0.04544153 -0.7740333 -2.597845            0  202
-##  8: 0.002227171 0.04544153 -0.8426403 -2.590776            0  103
-##  9: 0.002433090 0.04544153 -0.7546201 -2.570525            0  244
-## 10: 0.002237136 0.04544153 -0.8000658 -2.569853            0  141
+##            pval      padj         ES       NES nMoreExtreme size
+##  1: 0.002277904 0.0508366 -0.8585177 -2.662652            0  128
+##  2: 0.002309469 0.0508366 -0.8873458 -2.643421            0  100
+##  3: 0.002309469 0.0508366 -0.8855713 -2.638135            0  100
+##  4: 0.002257336 0.0508366 -0.8842923 -2.623054            0   95
+##  5: 0.002304147 0.0508366 -0.9083812 -2.619290            0   79
+##  6: 0.002320186 0.0508366 -0.8967344 -2.600916            0   81
+##  7: 0.002386635 0.0508366 -0.7740333 -2.522087            0  202
+##  8: 0.002444988 0.0508366 -0.7546201 -2.515622            0  244
+##  9: 0.002336449 0.0508366 -0.8426403 -2.514598            0  103
+## 10: 0.002320186 0.0508366 -0.8000658 -2.487740            0  141
 ##                                  leadingEdge
-##  1: 20085,19982,269261,20084,20103,74133,...
-##  2: 20085,19982,269261,20084,20103,65019,...
+##  1: 20085,19982,269261,20084,20103,65019,...
+##  2: 20085,19982,269261,20084,20103,74133,...
 ##  3: 20085,19982,269261,20084,20103,65019,...
 ##  4: 20085,19982,269261,20084,20103,65019,...
 ##  5: 20085,19982,269261,20084,20103,65019,...
 ##  6: 20085,19982,269261,20084,20103,65019,...
 ##  7: 20085,19982,269261,20084,20103,74133,...
-##  8: 20085,19982,269261,20084,20103,65019,...
-##  9: 20085,19982,269261,20084,20103,74133,...
+##  8: 20085,19982,269261,20084,20103,74133,...
+##  9: 20085,19982,269261,20084,20103,65019,...
 ## 10: 20085,19982,269261,20084,20103,65019,...</code></pre>
 <pre class="r"><code>fgseaResH &lt;- fgsea(pathwaysH, ranks, minSize=15, maxSize = 500, nperm=1000)</code></pre>
 <pre><code>## Warning in fgsea(pathwaysH, ranks, minSize = 15, maxSize = 500, nperm = 1000): You are trying to run fgseaSimple. It is recommended to use fgseaMultilevel. To run fgseaMultilevel, you need to remove the nperm argument in the fgsea function call.
@@ -1584,49 +1584,48 @@ fgseaResC2 &lt;- fgsea(pathwaysC2, ranks, minSize=15, maxSize = 500, nperm=1000)
 ## Warning in fgsea(pathwaysH, ranks, minSize = 15, maxSize = 500, nperm = 1000): There are ties in the preranked stats (0.08% of the list).
 ## The order of those tied genes will be arbitrary, which may produce unexpected results.</code></pre>
 <pre class="r"><code>head(fgseaResH[order(padj, -abs(NES)), ], n=20)</code></pre>
-<pre><code>##                                 pathway        pval        padj         ES
-##  1:             HALLMARK_MYC_TARGETS_V1 0.002364066 0.009092562 -0.6826742
-##  2:         HALLMARK_TGF_BETA_SIGNALING 0.002105263 0.009092562 -0.7419824
-##  3:  HALLMARK_OXIDATIVE_PHOSPHORYLATION 0.001736111 0.009092562  0.6475885
-##  4:             HALLMARK_MYC_TARGETS_V2 0.002136752 0.009092562 -0.7011704
-##  5:    HALLMARK_CHOLESTEROL_HOMEOSTASIS 0.001848429 0.009092562  0.7008853
-##  6:                HALLMARK_E2F_TARGETS 0.002364066 0.009092562 -0.5619850
-##  7:               HALLMARK_ADIPOGENESIS 0.001730104 0.009092562  0.5730449
-##  8:      HALLMARK_FATTY_ACID_METABOLISM 0.001730104 0.009092562  0.5762348
-##  9:           HALLMARK_MTORC1_SIGNALING 0.001730104 0.009092562  0.5499793
-## 10:             HALLMARK_G2M_CHECKPOINT 0.002364066 0.009092562 -0.5058712
-## 11:    HALLMARK_ESTROGEN_RESPONSE_EARLY 0.002320186 0.009092562 -0.4818514
-## 12:        HALLMARK_ALLOGRAFT_REJECTION 0.002358491 0.009092562 -0.4604850
-## 13:    HALLMARK_TNFA_SIGNALING_VIA_NFKB 0.002358491 0.009092562 -0.4490023
-## 14:                 HALLMARK_PEROXISOME 0.003642987 0.013010669  0.6087801
-## 15:            HALLMARK_NOTCH_SIGNALING 0.008385744 0.027681661 -0.6956626
-## 16:       HALLMARK_BILE_ACID_METABOLISM 0.009107468 0.027681661  0.5475702
-## 17:                 HALLMARK_DNA_REPAIR 0.009411765 0.027681661 -0.4592440
-## 18: HALLMARK_WNT_BETA_CATENIN_SIGNALING 0.010460251 0.029056253 -0.6575068
-## 19:     HALLMARK_ESTROGEN_RESPONSE_LATE 0.014184397 0.037327361 -0.4157999
-## 20:          HALLMARK_PROTEIN_SECRETION 0.036630037 0.091575092  0.4990399
+<pre><code>##                                 pathway        pval       padj         ES
+##  1:             HALLMARK_MYC_TARGETS_V1 0.002277904 0.01052189 -0.6826742
+##  2:  HALLMARK_OXIDATIVE_PHOSPHORYLATION 0.001748252 0.01052189  0.6475885
+##  3:         HALLMARK_TGF_BETA_SIGNALING 0.002114165 0.01052189 -0.7419824
+##  4:    HALLMARK_CHOLESTEROL_HOMEOSTASIS 0.001821494 0.01052189  0.7008853
+##  5:             HALLMARK_MYC_TARGETS_V2 0.002066116 0.01052189 -0.7011704
+##  6:                HALLMARK_E2F_TARGETS 0.002277904 0.01052189 -0.5619850
+##  7:               HALLMARK_ADIPOGENESIS 0.001745201 0.01052189  0.5730449
+##  8:           HALLMARK_MTORC1_SIGNALING 0.001751313 0.01052189  0.5499793
+##  9:                 HALLMARK_PEROXISOME 0.001845018 0.01052189  0.6087801
+## 10:             HALLMARK_G2M_CHECKPOINT 0.002277904 0.01052189 -0.5058712
+## 11:    HALLMARK_ESTROGEN_RESPONSE_EARLY 0.002314815 0.01052189 -0.4818514
+## 12:      HALLMARK_FATTY_ACID_METABOLISM 0.003663004 0.01526252  0.5762348
+## 13:       HALLMARK_BILE_ACID_METABOLISM 0.005504587 0.02117149  0.5475702
+## 14:        HALLMARK_ALLOGRAFT_REJECTION 0.006849315 0.02446184 -0.4604850
+## 15: HALLMARK_WNT_BETA_CATENIN_SIGNALING 0.008421053 0.02631579 -0.6575068
+## 16:            HALLMARK_NOTCH_SIGNALING 0.008179959 0.02631579 -0.6956626
+## 17:                 HALLMARK_DNA_REPAIR 0.010989011 0.03232062 -0.4592440
+## 18:    HALLMARK_TNFA_SIGNALING_VIA_NFKB 0.011655012 0.03237503 -0.4490023
+## 19:     HALLMARK_ESTROGEN_RESPONSE_LATE 0.021176471 0.05572755 -0.4157999
+## 20:          HALLMARK_PROTEIN_SECRETION 0.025878004 0.06469501  0.4990399
 ##           NES nMoreExtreme size                                 leadingEdge
-##  1: -2.257565            0  201     23918,20103,12567,27050,20104,14694,...
-##  2: -2.061286            0   54     15901,17131,15903,16997,13805,20482,...
-##  3:  2.047603            0  196   108664,73834,20930,67863,12039,109754,...
-##  4: -1.958728            0   58   12567,18148,53608,13537,101612,235036,...
-##  5:  1.943529            0   73 170459,16835,208715,63913,319554,235293,...
-##  6: -1.858453            0  201    12704,15374,12567,218210,16201,20492,...
-##  7:  1.814352            0  199    12683,227095,13476,18405,72157,12039,...
-##  8:  1.761054            0  155  12683,208715,227095,319554,12613,18194,...
-##  9:  1.744467            0  203  12450,170459,16835,208715,63913,319554,...
-## 10: -1.672888            0  201    15374,17975,12567,16201,105727,27041,...
-## 11: -1.590655            0  193     11839,22403,27205,98952,16763,12614,...
-## 12: -1.521708            0  202     20085,16156,20005,18148,76846,20091,...
-## 13: -1.484978            0  199     11839,12156,16878,18124,13537,14528,...
-## 14:  1.740544            1   95    16413,19299,319554,12613,14712,66887,...
-## 15: -1.743324            3   31    18128,109689,74198,15205,21402,56198,...
-## 16:  1.575866            4   98    19299,319554,14712,66887,18642,14711,...
-## 17: -1.485504            3  150 23918,11636,20016,100042069,21681,69241,...
-## 18: -1.729409            4   40     18128,22419,15213,12006,20602,21414,...
-## 19: -1.371424            5  197     14184,11839,22403,98952,14620,69540,...
-## 20:  1.427450           19   96    108664,22319,56382,99371,69938,12176,...</code></pre>
-<pre class="r"><code>#head(fgseaRes[order(padj, -abs(NES)), ], n=20)</code></pre>
+##  1: -2.264405            0  201     23918,20103,12567,27050,20104,14694,...
+##  2:  2.066799            0  196   108664,73834,20930,67863,12039,109754,...
+##  3: -2.009290            0   54     15901,17131,15903,16997,13805,20482,...
+##  4:  1.947338            0   73 170459,16835,208715,63913,319554,235293,...
+##  5: -1.943605            0   58   12567,18148,53608,13537,101612,235036,...
+##  6: -1.864084            0  201    12704,15374,12567,218210,16201,20492,...
+##  7:  1.832673            0  199    12683,227095,13476,18405,72157,12039,...
+##  8:  1.763742            0  203  12450,170459,16835,208715,63913,319554,...
+##  9:  1.760775            0   95    16413,19299,319554,12613,14712,66887,...
+## 10: -1.677956            0  201    15374,17975,12567,16201,105727,27041,...
+## 11: -1.584557            0  193     11839,22403,27205,98952,16763,12614,...
+## 12:  1.764785            1  155  12683,208715,227095,319554,12613,18194,...
+## 13:  1.594234            2   98    19299,319554,14712,66887,18642,14711,...
+## 14: -1.525955            2  202     20085,16156,20005,18148,76846,20091,...
+## 15: -1.693331            3   40     18128,22419,15213,12006,20602,21414,...
+## 16: -1.693149            3   31    18128,109689,74198,15205,21402,56198,...
+## 17: -1.451626            4  150 23918,11636,20016,100042069,21681,69241,...
+## 18: -1.481846            4  199     11839,12156,16878,18124,13537,14528,...
+## 19: -1.369648            8  197     14184,11839,22403,98952,14620,69540,...
+## 20:  1.445366           13   96    108664,22319,56382,99371,69938,12176,...</code></pre>
 </div>
 <div id="challenge-2" class="section level3">
 <h3>Challenge 2</h3>
@@ -1675,8 +1674,8 @@ goResultsUp %&gt;%
 </blockquote>
 <pre class="r"><code>sigGenes &lt;- shrinkLvV$FDR &lt; 0.01 &amp; !is.na(shrinkLvV$FDR)
 
-logFC &lt;- annotLvV$logFC[sigGenes]
-names(logFC) &lt;- annotLvV$Entrez[sigGenes]
+logFC &lt;- shrinkLvV$logFC[sigGenes]
+names(logFC) &lt;- shrinkLvV$Entrez[sigGenes]
 
 pathview(gene.data = logFC, 
          pathway.id = &quot;mmu04060&quot;, 

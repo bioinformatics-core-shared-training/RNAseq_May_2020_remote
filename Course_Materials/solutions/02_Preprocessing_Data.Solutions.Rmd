@@ -39,8 +39,6 @@ keep <- rowSums(countdata) > 5
 countdata <- countdata[keep,]
 # rlogcounts
 rlogcounts <- rlog(countdata)
-# We estimate the variance for each row in the logcounts matrix
-countVar <- apply(rlogcounts, 1, var)
 # DGE list
 design <- as.formula(~ CellType)
 # create the DESeqDataSet object

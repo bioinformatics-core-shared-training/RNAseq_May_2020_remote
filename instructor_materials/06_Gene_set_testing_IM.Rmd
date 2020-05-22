@@ -276,8 +276,8 @@ browseKEGG(kk, 'mmu03320')
 ```{r pathview, message=F, eval=FALSE}
 library(pathview)
 
-logFC <- annotLvV$logFC
-names(logFC) <- annotLvV$Entrez
+logFC <- shrinkLvV$logFC
+names(logFC) <- shrinkLvV$Entrez
 
 pathview(gene.data = logFC, 
          pathway.id = "mmu03320", 
@@ -293,8 +293,8 @@ pathview(gene.data = logFC,
 ```{r solution3, eval=FALSE}
 sigGenes <- shrinkLvV$FDR < 0.01 & !is.na(shrinkLvV$FDR)
 
-logFC <- annotLvV$logFC[sigGenes]
-names(logFC) <- annotLvV$Entrez[sigGenes]
+logFC <- shrinkLvV$logFC[sigGenes]
+names(logFC) <- shrinkLvV$Entrez[sigGenes]
 
 pathview(gene.data = logFC, 
          pathway.id = "mmu04060", 
