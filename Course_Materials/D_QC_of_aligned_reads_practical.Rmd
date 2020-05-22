@@ -113,7 +113,7 @@ input bam, the name of the output metrics file and the fasta reference.
 > 1. Run Picard's `CollectAlignmentSummaryMetrics` tool on the sorted bam 
 >    providing the following options.
 >     * INPUT - The sorted bam file
->     * OUTPUT - bam/MCL1.DL.alignment_metrics.bam
+>     * OUTPUT - bam/MCL1.DL.alignment_metrics.txt
 >     * REFERENCE_SEQUENCE - references/Mus_musculus.GRCm38.dna.primary_assembly.fa
 >
 > Q. What is the mismatch rate? This is the fraction of bases in mapped reads

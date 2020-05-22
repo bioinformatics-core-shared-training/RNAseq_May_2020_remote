@@ -36,7 +36,7 @@ Access the help page to find the basic usage an other options:
 
 `hisat2-build --help`
 
-The **Usage** is:
+The **Usage** provides an outline of the way to use the command:
 
 ```
 hisat2-build [options]* <reference_in> <ht2_index_base>
@@ -44,11 +44,17 @@ hisat2-build [options]* <reference_in> <ht2_index_base>
     hisat2_index_base       write ht2 data to files with this dir/basename
 ```
 
-This means that we have to use the command `hisat2-build` to run the programme
-and then we need to provide the reference genome files `<reference_in>` and
-a base name for the index files `<hisat2_index_base>`. HISAT2 is going to
-generate a number of files for the index and their names will all start with
-our 'basename'.
+This means that we have to use the command `hisat2-build` to run the programme.
+
+Then we need to replace `<reference_in>` with the name of our reference 
+genome files and replace  `<hisat2_index_base>` with a 'basename' for the index 
+files that the command will generate. 
+
+HISAT2 is going to generate a number of files for the index. The 'basename' is 
+what all the name of these files will start with. e.g is the 'basename' we give
+is `references/my_index` then we will get a number of files called `myindex.1.ht2`,  
+`myindex.2.ht2`,  `myindex.3.ht2` ...etc. inside the directory `references` 
+(this directory must already exist).
 
 ### Exercise 1
 

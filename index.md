@@ -38,13 +38,17 @@ make adjusments to the course as we go.
 
 ## Google Document
 
-There is a [Google Document](https://docs.google.com/document/d/1CoSD_vdKrRiIu6sdC4TvIr71uUUittCTDYnc9VlTlpw/edit?usp=sharing) for the course. 
+There is a [Google Document](html/Analysis_of_bulk_RNA-seq_data_-_Main_Document.pdf) 
+for the course. 
 
 It contains useful information and links relevant to the course.
 
-Please use it to post any questions you have during the course. The
-trainers will be monitoring the document and will answer questions as quickly
-as they can.
+~~Please use it to post any questions you have during the course. The~~
+~~trainers will be monitoring the document and will answer questions as quickly~~
+~~as they can.~~
+
+There were over 140 questions during the course!! A pdf of the final Google 
+Document can be found [here](html/Analysis_of_bulk_RNA-seq_data_-_Main_Document.pdf).
 
 ## Course etiquette
 
@@ -109,33 +113,35 @@ Methods](html/A_Introduction_to_RNAseq_Methods.html) - Sankari Nagarajan
 
 10:00 - 12:00 - [RNA-seq Pre-processing](html/02_Preprocessing_Data.html) -
 Stephane Ballereau  
-<!--     - [Practical solutions](html/02_Preprocessing_Data.Solutions.html)   -->
+    - [Practical solutions](html/02_Preprocessing_Data.Solutions.html)   
+    - [R script from live session](live_scripts/02_Preprocessing_Data.R)
 
 13:00 - 15:00 Statistical Analysis of Bulk RNAseq Data - Dominique-Laurent  
-Couturier   
-    - [Slides](html/StatsRNAseq_Couturier_20-05-2020.pdf)
-    - [Practical (html)](html/StatsRNAseq_Couturier_20-05-2020.html)  
-    - [Practical (rmd)](html/StatsRNAseq_Couturier_20-05-2020.Rmd)  
+Couturier     
+    - [Slides](html/StatsRNAseq_Couturier_20-05-2020.pdf)   
+    - [Practical (html)](html/StatsRNAseq_Couturier_20-05-2020.html) [(rmd)](html/StatsRNAseq_Couturier_20-05-2020.Rmd)  
 
 15:00 - 16:00 Experimental Design of Bulk RNAseq studies - Sankari Nagarajan  
     - [Slides](html/ExperimentalDesignCourse_Nagarajan_20-05-2020.pdf)  
-    - [Practical](html/RNAseq_ExperimentalDesignPractical.pdf)  
- 
+    - [Practical](html/RNAseq_ExperimentalDesignPractical.pdf)    
+    - [Practical Answers](html/RNAseq_ExperimentalDesignPractical_Answers.pdf)   
+
 ### Day 3
 
 9:30 - 12:00 - [Differential Expression for
 RNA-seq](html/04_DE_analysis_with_DESeq2.html) - Ashley Sawle   
-<!--     - [practical solutions](html/04_DE_analysis.Solutions.html) -->
+    - [practical solutions](html/04_DE_analysis.Solutions.html)   
+    - [R script from session](live_scripts/04_DE_analysis_with_DESeq2.R)
 
 12:00 - 13:00 Lunch
 
 13:00 - 15:00 [Annotation and Visualisation of RNA-seq
 results](html/05_Annotation_and_Visualisation.html) - Abbi Edwards  
-<!--    - [practical 
-solutions](html/05_Annotation_and_Visualisation.Solutions.html) -->
+    - [practical solutions](html/05_Annotation_and_Visualisation.Solutions.html)  
+    - [R script from session](live_scripts/05_Annotation_and_Visualisation.R)
 
-15:00 - 16:00 [Gene-set testing](html/06_Gene_set_testing.html) - Stephane Ballereau 
-<!--     - [practical solutions](html/06_Gene_set_testing.Solutions.html) -->
+15:00 - 16:00 [Gene-set testing](html/06_Gene_set_testing.html) - Stephane Ballereau   
+    - [practical solutions](html/06_Gene_set_testing.Solutions.html)  
 
 > ## Prerequisites
 >
@@ -152,7 +158,7 @@ solutions](html/05_Annotation_and_Visualisation.Solutions.html) -->
 
 The all of the lecture slides and other source materials, including R code and 
 practical solutions, can be found in the course's [Github 
-repository](https://github.com/bioinformatics-core-shared-training/RNAseq_May_2020i_remote)
+repository](https://github.com/bioinformatics-core-shared-training/RNAseq_May_2020_remote)
 
 ## Extended materials
 
@@ -162,6 +168,13 @@ contain the full course materials and links to additional RNAseq materials,
 including instruction on downloading and processing the raw data for this
 course, a link to an excellent R course, and where to get further help after
 the course.
+
+## Additional Resources
+
+* [Bioconductor for relevant R packages](https://bioconductor.org/)
+* [DESeq2 Vignette](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html)  
+* [RNAseq Workflow](http://master.bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html)  
+* [RStudio CheatSheets](https://rstudio.com/resources/cheatsheets/)
 
 ## Acknowledgements
 

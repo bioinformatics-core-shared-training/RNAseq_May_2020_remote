@@ -145,9 +145,12 @@ annot <-AnnotationDbi::select(EnsDb.Mmusculus.v79,
                 columns=ourCols, 
                 keytype="GENEID")
 # multiple EntrezIDs
-annot %>%  
-    add_count(GENEID) %>%  
-    dplyr::filter(n>1)
+multiples <- annot %>%
+  add_count(GENEID) %>%  
+  dplyr::filter(n>1)
+
+length(unique(multiples$SYMBOL))
+
 ```
 
 ### Add annotation to the results table
@@ -294,8 +297,8 @@ An example of what your plot should look like:
 
 ```{r volcanoPlot, fig.height=5, fig.width=7}
 # First load data and annotations
-load("../Robjects/DE.RData")
-load("../Robjects/Ensembl_annotations.RData")
+load("../Course_Materials/Robjects/DE.RData")
+load("../Course_Materials/Robjects/Ensembl_annotations.RData")
 
 #Shrink our values
 ddsShrink <- lfcShrink(ddsObj, coef="Status_lactate_vs_virgin")
