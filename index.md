@@ -113,7 +113,7 @@ Methods](html/A_Introduction_to_RNAseq_Methods.html) - Sankari Nagarajan
 
 10:00 - 12:00 - [RNA-seq Pre-processing](html/02_Preprocessing_Data.html) -
 Stephane Ballereau  
-    - [Practical solutions](html/02_Preprocessing_Data.Solutions.html) 
+    - [Practical solutions](html/02_Preprocessing_Data.Solutions.html)   
     - [R script from live session](live_scripts/02_Preprocessing_Data.R)
 
 13:00 - 15:00 Statistical Analysis of Bulk RNAseq Data - Dominique-Laurent  
@@ -130,18 +130,18 @@ Couturier
 
 9:30 - 12:00 - [Differential Expression for
 RNA-seq](html/04_DE_analysis_with_DESeq2.html) - Ashley Sawle   
-    - [practical solutions](html/04_DE_analysis.Solutions.html)
+    - [practical solutions](html/04_DE_analysis.Solutions.html)   
     - [R script from session](live_scripts/04_DE_analysis_with_DESeq2.R)
 
 12:00 - 13:00 Lunch
 
 13:00 - 15:00 [Annotation and Visualisation of RNA-seq
 results](html/05_Annotation_and_Visualisation.html) - Abbi Edwards  
-    - [practical solutions](html/05_Annotation_and_Visualisation.Solutions.html)
+    - [practical solutions](html/05_Annotation_and_Visualisation.Solutions.html)  
     - [R script from session](live_scripts/05_Annotation_and_Visualisation.R)
 
-15:00 - 16:00 [Gene-set testing](html/06_Gene_set_testing.html) - Stephane Ballereau 
-    - [practical solutions](html/06_Gene_set_testing.Solutions.html)
+15:00 - 16:00 [Gene-set testing](html/06_Gene_set_testing.html) - Stephane Ballereau   
+    - [practical solutions](html/06_Gene_set_testing.Solutions.html)  
 
 > ## Prerequisites
 >
@@ -171,6 +171,7 @@ the course.
 
 ## Additional Resources
 
+* [Bioconductor for relevant R packages](https://bioconductor.org/)
 * [DESeq2 Vignette](https://bioconductor.org/packages/release/bioc/vignettes/DESeq2/inst/doc/DESeq2.html)  
 * [RNAseq Workflow](http://master.bioconductor.org/packages/release/workflows/vignettes/rnaseqGene/inst/doc/rnaseqGene.html)  
 * [RStudio CheatSheets](https://rstudio.com/resources/cheatsheets/)
