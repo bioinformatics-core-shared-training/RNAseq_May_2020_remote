@@ -192,11 +192,14 @@ summary {
 <p>The command to index the genome for HISAT2 is <code>hisat2-build</code>.</p>
 <p>Access the help page to find the basic usage an other options:</p>
 <p><code>hisat2-build --help</code></p>
-<p>The <strong>Usage</strong> is:</p>
+<p>The <strong>Usage</strong> provides an outline of the way to use the command:</p>
 <pre><code>hisat2-build [options]* &lt;reference_in&gt; &lt;ht2_index_base&gt;
     reference_in            comma-separated list of files with ref sequences
     hisat2_index_base       write ht2 data to files with this dir/basename</code></pre>
-<p>This means that we have to use the command <code>hisat2-build</code> to run the programme and then we need to provide the reference genome files <code>&lt;reference_in&gt;</code> and a base name for the index files <code>&lt;hisat2_index_base&gt;</code>. HISAT2 is going to generate a number of files for the index and their names will all start with our ‘basename’.</p>
+<p>This means that we have to use the command <code>hisat2-build</code> to run the programme.</p>
+<p>Then we need to replace <code>&lt;reference_in&gt;</code> with the name of our reference genome files and replace <code>&lt;hisat2_index_base&gt;</code> with a ‘basename’ for the index files that the command will generate.</p>
+<p>HISAT2 is going to generate a number of files for the index. The ‘basename’ is what all the name of these files will start with. e.g is the ‘basename’ we give is <code>references/my_index</code> then we will get a number of files called <code>myindex.1.ht2</code>,<br />
+<code>myindex.2.ht2</code>, <code>myindex.3.ht2</code> …etc. inside the directory <code>references</code> (this directory must already exist).</p>
 <div id="exercise-1" class="section level3">
 <h3>Exercise 1</h3>
 <blockquote>

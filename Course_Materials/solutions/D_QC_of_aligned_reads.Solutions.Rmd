@@ -71,7 +71,7 @@ java -jar picard/picard.jar MarkDuplicates \
 > 1. Run Picard's `CollectAlignmentSummaryMetrics` tool on the sorted bam 
 >    providing the following options.
 >     * INPUT - The sorted bam file
->     * OUTPUT - "bam/MCL1.DL.alignment_metrics.bam"
+>     * OUTPUT - "bam/MCL1.DL.alignment_metrics.txt"
 >     * REFERENCE_SEQUENCE - "references/Mus_musculus.GRCm38.dna.primary_assembly.fa"
 ```
 java -jar picard/picard.jar CollectAlignmentSummaryMetrics \
